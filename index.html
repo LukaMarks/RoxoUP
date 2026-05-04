@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoxoUP - Produtividade</title>
     <link rel="website icon" type="png" href="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png">
-    <meta name="msapplication-navbutton-color" content="purple">
+    <meta name="msapplication-navbutton-color" content="#5D1789">
 <style>
     /* Reset e Base */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,46 +34,51 @@
     .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
     .buttons button { padding: 15px; font-size: 1.2rem; }
 
-    /* Calendário Dinâmico */
+    /* Calendário */
     .calendar { background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; }
     .month-header { 
         background: #5D1789; color: white; padding: 15px; 
         display: flex; justify-content: space-between; align-items: center; 
     }
     .month-header button { background: none; font-size: 20px; padding: 5px 15px; width: auto; }
-    
-    .calendar ul { list-style-type: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; width: 100%; }
-    .weekdays { background-color: #eee; font-weight: bold; font-size: 12px; }
-    .weekdays li, .days li { width: 14.28%; text-align: center; padding: 10px 0; box-sizing: border-box; }
-    
-    .days li { cursor: pointer; border: 0.5px solid #f9f9f9; font-size: 14px; transition: 0.2s; position: relative; }
-    .days li:hover { background: #f0e6ff; }
+    .weekdays { background-color: #eee; font-weight: bold; font-size: 12px; display: flex; list-style: none; }
+    .weekdays li, .days li { width: 14.28%; text-align: center; padding: 10px 0; }
+    .days { list-style: none; display: flex; flex-wrap: wrap; }
+    .days li { cursor: pointer; border: 0.5px solid #f9f9f9; font-size: 14px; position: relative; }
     .has-event::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #5D1789; border-radius: 50%; }
     .today { background: #e0b3ff !important; font-weight: bold; color: #5D1789; }
 
-    #calNoteArea { margin-top: 15px; padding: 15px; background: #fffde7; border-radius: 8px; border: 1px solid #fbc02d; display: none; }
-    .note-display { margin-bottom: 10px; padding: 8px; background: rgba(255,255,255,0.5); border-radius: 4px; border-left: 4px solid purple; display: flex; justify-content: space-between; align-items: center; }
+    /* IA */
+    .ia-section { background: #f3e5f5; border-left: 5px solid #5D1789; }
+    #iaResponse { margin-top: 15px; font-size: 14px; color: #333; line-height: 1.4; white-space: pre-wrap; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; min-height: 20px; display: none; }
 
-    footer { background: #333; color: white; text-align: center; padding: 40px 20px; width: 100%; margin-top: 20px; }
+    footer { background: #333; color: white; text-align: center; padding: 20px; width: 100%; margin-top: 20px; }
 </style>
 </head>
 <body>
   
-          <center>
-            <img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png" style="width: 100px; border-radius: 50%; margin: 10px 0;">
-        </center>
-        <center>
+    <center>
+        <img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png" style="width: 100px; border-radius: 50%; margin: 10px 0;">
         <h1>RoxoUP</h1>
         <h5>by @Lukamarks</h5>
-        </div>
-        </center>
+    </center>
 
     <div class="content">
+        <div class="container ia-section">
+            <h2>Assistente IA 🤖✨</h2>
+            <h5><span style="color:gray">by Google Gemini</span></h5>
+            <div class="input-group">
+                <input type="text" id="iaInput" placeholder="Como posso te ajudar hoje?">
+                <button onclick="askAI()" id="btnIA">Perguntar à IA</button>
+            </div>
+            <div id="iaResponse"></div>
+        </div>
+
         <div class="container">
-            <h1>Para não esquecer: 📝🧠</h1>
+            <h2>Para não esquecer: 📝🧠</h2>
             <h5><span style="color:gray">Compras,Tarefas, Lembretes e etc.</span></h5>
             <div class="input-group">
-                <input type="text" id="taskInput" placeholder="Digite aqui...">
+                <input type="text" id="taskInput" placeholder="Nova tarefa...">
                 <button onclick="addTask()">Adicionar</button>
             </div>
             <div id="taskList"></div>
@@ -81,13 +86,12 @@
 
         <div class="container">
             <h2>Calculadora 🔢</h2>
-            <h5><span style="color:gray">Eu não confiaria kkk</span></h5>
             <div class="calc">
                 <input type="text" id="display" disabled>
                 <div class="buttons">
                     <button onclick="clearDisplay()" style="background: #ff4444;">C</button>
-                    <button onclick="appendToDisplay('/')">÷</button>
-                    <button onclick="appendToDisplay('*')">×</button>
+                    <button onclick="appendToDisplay('/')">/</button>
+                    <button onclick="appendToDisplay('*')">*</button>
                     <button onclick="appendToDisplay('+')">+</button>
                     <button onclick="appendToDisplay('1')">1</button>
                     <button onclick="appendToDisplay('2')">2</button>
@@ -119,152 +123,112 @@
                 </ul>
                 <ul class="days" id="calendarDays"></ul>
             </div>
-            
-            <div id="calNoteArea">
-                <h4 style="margin-bottom: 10px;">Dia <span id="selectedDateLabel"></span></h4>
-                <div id="noteContent"></div> <div class="input-group" id="noteInputSection">
-                    <input type="text" id="dayNoteInput" placeholder="O que agendar?">
-                    <button onclick="saveDayNote()" style="background: #28a745;">Agendar</button>
-                </div>
-            </div>
         </div>
 
-        <marquee><h3><span style="color: #5D1789">V.1.0 - beta - Tudo em um só lugar!</span></h3></marquee>
+        <marquee><h3><span style="color: #5D1789">RoxoUP V.1.1 - Inteligência Artificial Integrada!</span></h3></marquee>
     </div>
 
 <script>
-    // --- LÓGICA DE TAREFAS ---
+    // --- CHAVE NOVA ATUALIZADA ---
+const API_KEY = "AIzaSyBVfByqlmrFTtcPt37T6AIvuxTqDeVuO4M";
+
+
+    async function askAI() {
+        const input = document.getElementById('iaInput');
+        const responseDiv = document.getElementById('iaResponse');
+        const btn = document.getElementById('btnIA');
+
+        if (!input.value.trim()) return alert("Escreva algo para a IA!");
+
+        btn.innerText = "Pensando...";
+        btn.disabled = true;
+        responseDiv.style.display = "block";
+        responseDiv.innerText = "Buscando resposta...";
+
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: `Você é o assistente do app RoxoUP. Responda de forma muito curta e direta: ${input.value}` }] }],
+                    generationConfig: { maxOutputTokens: 200 } // Limite para evitar gastos excessivos
+                })
+            });
+
+            const data = await response.json();
+            const aiText = data.candidates[0].content.parts[0].text;
+            responseDiv.innerText = aiText;
+        } catch (e) {
+            responseDiv.innerText = "Ocorreu um erro. Tente novamente mais tarde.";
+        } finally {
+            btn.innerText = "Perguntar à IA";
+            btn.disabled = false;
+        }
+    }
+
+    // --- TAREFAS ---
     function loadTasks() {
-        const tasks = JSON.parse(localStorage.getItem('tasks_v2')) || [];
-        const list = document.getElementById('taskList');
-        list.innerHTML = tasks.map((t, i) => `
+        const tasks = JSON.parse(localStorage.getItem('roxo_tasks')) || [];
+        document.getElementById('taskList').innerHTML = tasks.map((t, i) => `
             <div class="item-tarefa ${t.done ? 'done' : ''}">
                 <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${i})">
                 <span>${t.text}</span>
-                <button class="btn-delete" onclick="deleteTask(${i})">Remover</button>
+                <button class="btn-delete" onclick="deleteTask(${i})">X</button>
             </div>
         `).join('');
     }
-
     function addTask() {
         const input = document.getElementById('taskInput');
         if (!input.value.trim()) return;
-        const tasks = JSON.parse(localStorage.getItem('tasks_v2')) || [];
+        const tasks = JSON.parse(localStorage.getItem('roxo_tasks')) || [];
         tasks.push({ text: input.value, done: false });
-        localStorage.setItem('tasks_v2', JSON.stringify(tasks));
-        input.value = "";
-        loadTasks();
+        localStorage.setItem('roxo_tasks', JSON.stringify(tasks));
+        input.value = ""; loadTasks();
     }
-
     function toggleTask(i) {
-        const tasks = JSON.parse(localStorage.getItem('tasks_v2'));
+        const tasks = JSON.parse(localStorage.getItem('roxo_tasks'));
         tasks[i].done = !tasks[i].done;
-        localStorage.setItem('tasks_v2', JSON.stringify(tasks));
+        localStorage.setItem('roxo_tasks', JSON.stringify(tasks));
         loadTasks();
     }
-
     function deleteTask(i) {
-        const tasks = JSON.parse(localStorage.getItem('tasks_v2'));
+        const tasks = JSON.parse(localStorage.getItem('roxo_tasks'));
         tasks.splice(i, 1);
-        localStorage.setItem('tasks_v2', JSON.stringify(tasks));
+        localStorage.setItem('roxo_tasks', JSON.stringify(tasks));
         loadTasks();
     }
 
     // --- CALCULADORA ---
-    const display = document.getElementById('display');
-    function appendToDisplay(v) { display.value += v; }
-    function clearDisplay() { display.value = ""; }
-    function calculate() {
-        try { display.value = eval(display.value); } 
-        catch { display.value = "Erro"; setTimeout(clearDisplay, 1000); }
-    }
+    const disp = document.getElementById('display');
+    function appendToDisplay(v) { disp.value += v; }
+    function clearDisplay() { disp.value = ""; }
+    function calculate() { try { disp.value = eval(disp.value); } catch { disp.value = "Erro"; } }
 
-    // --- LÓGICA DO CALENDÁRIO COM REMOÇÃO ---
-    let navDate = new Date();
-    let selectedDayKey = "";
-
+    // --- CALENDÁRIO ---
+    let date = new Date();
     function renderCalendar() {
-        const daysUl = document.getElementById('calendarDays');
-        const monthLabel = document.getElementById('monthDisplay');
-        const m = navDate.getMonth();
-        const y = navDate.getFullYear();
-        
+        const mDisplay = document.getElementById('monthDisplay');
+        const dDisplay = document.getElementById('calendarDays');
+        const m = date.getMonth(), y = date.getFullYear();
         const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-        monthLabel.innerText = `${months[m]} ${y}`;
-
-        const firstDay = new Date(y, m, 1).getDay();
-        const lastDay = new Date(y, m + 1, 0).getDate();
-        const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
-
-        daysUl.innerHTML = "";
-        for (let x = firstDay; x > 0; x--) daysUl.appendChild(document.createElement("li"));
-
-        for (let d = 1; d <= lastDay; d++) {
-            const li = document.createElement("li");
-            const key = `${d}-${m}-${y}`;
-            li.innerText = d;
-            if (notes[key]) li.classList.add('has-event');
-            if (d === new Date().getDate() && m === new Date().getMonth() && y === new Date().getFullYear()) li.classList.add('today');
-            
-            li.onclick = () => showDayDetails(d, m, y, key);
-            daysUl.appendChild(li);
+        mDisplay.innerText = `${months[m]} ${y}`;
+        dDisplay.innerHTML = "";
+        const first = new Date(y, m, 1).getDay();
+        const last = new Date(y, m + 1, 0).getDate();
+        for (let i = 0; i < first; i++) dDisplay.appendChild(document.createElement("li"));
+        for (let d = 1; d <= last; d++) {
+            const li = document.createElement("li"); li.innerText = d;
+            if (d === new Date().getDate() && m === new Date().getMonth()) li.classList.add('today');
+            dDisplay.appendChild(li);
         }
     }
+    function changeMonth(dir) { date.setMonth(date.getMonth() + dir); renderCalendar(); }
 
-    function showDayDetails(d, m, y, key) {
-        selectedDayKey = key;
-        const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-        document.getElementById('calNoteArea').style.display = 'block';
-        document.getElementById('selectedDateLabel').innerText = `${d} de ${months[m]}`;
-        
-        const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
-        const content = document.getElementById('noteContent');
-        
-        if (notes[key]) {
-            content.innerHTML = `
-                <div class="note-display">
-                    <span>${notes[key]}</span>
-                    <button onclick="deleteEvent('${key}')" style="background:red; padding:4px 8px; font-size:10px;">Apagar</button>
-                </div>
-            `;
-            document.getElementById('noteInputSection').style.display = 'none';
-        } else {
-            content.innerHTML = "<p style='color:gray; font-size:12px; margin-bottom:10px;'>Nada agendado.</p>";
-            document.getElementById('noteInputSection').style.display = 'flex';
-        }
-    }
-
-    function saveDayNote() {
-        const val = document.getElementById('dayNoteInput').value;
-        if (!val) return;
-        const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
-        notes[selectedDayKey] = val;
-        localStorage.setItem('cal_notes_v2', JSON.stringify(notes));
-        document.getElementById('dayNoteInput').value = "";
-        renderCalendar();
-        showDayDetails(...selectedDayKey.split('-').map(Number), selectedDayKey);
-    }
-
-    function deleteEvent(key) {
-        const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
-        delete notes[key];
-        localStorage.setItem('cal_notes_v2', JSON.stringify(notes));
-        renderCalendar();
-        showDayDetails(...key.split('-').map(Number), key);
-    }
-
-    function changeMonth(dir) {
-        navDate.setMonth(navDate.getMonth() + dir);
-        renderCalendar();
-        document.getElementById('calNoteArea').style.display = 'none';
-    }
-
-    // Inicialização
     loadTasks();
     renderCalendar();
 </script>
 </body>
 <footer>
-    <p>Desenvolvido por <strong>Lucas Marques</strong> &copy; 2026</p>
+    <p>RoxoUP por Lucas Marques &copy; 2026</p>
 </footer>
 </html>
