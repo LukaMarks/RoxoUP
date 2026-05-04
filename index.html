@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoxoUP - Produtividade</title>
+    <link rel="website icon" type="png" href="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png">
+    <meta name="msapplication-navbutton-color" content="#5D1789">
+<style>
+    /* Reset e Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; flex-direction: column; min-height: 100vh; }
+
+    .content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+    .container { 
+        background: white; padding: 25px; border-radius: 12px; width: 100%; 
+        max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; 
+    }
+
+    .input-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+    input { padding: 12px; border: 1px solid #ccc; border-radius: 5px; }
+    button { padding: 12px; background: #5D1789; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button:active { transform: scale(0.98); }
+
+    /* Lista de Tarefas */
+    .item-tarefa { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee; }
+    .done { text-decoration: line-through; color: gray; }
+    .btn-delete { background: #ff4444; padding: 5px 10px; font-size: 12px; margin-left: auto; }
+    
+    /* Calculadora */
+    .calc { display: flex; flex-direction: column; gap: 10px; }
+    #display { width: 100%; height: 50px; font-size: 1.5rem; text-align: right; padding: 10px; background: #eee; border: none; border-radius: 5px; color: #333; }
+    .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .buttons button { padding: 15px; font-size: 1.2rem; }
+
+    /* Calendário Dinâmico */
+    .calendar { background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; }
+    .month-header { 
+        background: #5D1789; color: white; padding: 15px; 
+        display: flex; justify-content: space-between; align-items: center; 
+    }
+    .month-header button { background: none; font-size: 20px; padding: 5px 15px; width: auto; }
+    
+    .calendar ul { list-style-type: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; width: 100%; }
+    .weekdays { background-color: #eee; font-weight: bold; font-size: 12px; }
+    .weekdays li, .days li { width: 14.28%; text-align: center; padding: 10px 0; box-sizing: border-box; }
+    
+    .days li { cursor: pointer; border: 0.5px solid #f9f9f9; font-size: 14px; transition: 0.2s; position: relative; }
+    .days li:hover { background: #f0e6ff; }
+    .has-event::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #5D1789; border-radius: 50%; }
+    .today { background: #e0b3ff !important; font-weight: bold; color: #5D1789; }
+
+    #calNoteArea { margin-top: 15px; padding: 15px; background: #fffde7; border-radius: 8px; border: 1px solid #fbc02d; display: none; }
+    .note-display { margin-bottom: 10px; padding: 8px; background: rgba(255,255,255,0.5); border-radius: 4px; border-left: 4px solid purple; display: flex; justify-content: space-between; align-items: center; }
+
+    footer { background: #333; color: white; text-align: center; padding: 40px 20px; width: 100%; margin-top: 20px; }
+</style>
+</head>
+<body>
+  
+          <center>
+            <img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png" style="width: 100px; border-radius: 50%; margin: 10px 0;">
+        </center>
+        <center>
+        <h1>RoxoUP</h1>
+        <h5>by @Lukamarks</h5>
+        </div>
+        </center>
+
+    <div class="content">
+        <div class="container">
+            <h1>Para não esquecer: 📝🧠</h1>
+            <h5><span style="color:gray">Compras,Tarefas, Lembretes e etc.</span></h5>
+            <div class="input-group">
+                <input type="text" id="taskInput" placeholder="Digite aqui...">
+                <button onclick="addTask()">Adicionar</button>
+            </div>
+            <div id="taskList"></div>
+        </div>
+
+        <div class="container">
+            <h2>Calculadora 🔢</h2>
+            <h5><span style="color:gray">Eu não confiaria kkk</span></h5>
+            <div class="calc">
+                <input type="text" id="display" disabled>
+                <div class="buttons">
+                    <button onclick="clearDisplay()" style="background: #ff4444;">C</button>
+                    <button onclick="appendToDisplay('/')">÷</button>
+                    <button onclick="appendToDisplay('*')">×</button>
+                    <button onclick="appendToDisplay('+')">+</button>
+                    <button onclick="appendToDisplay('1')">1</button>
+                    <button onclick="appendToDisplay('2')">2</button>
+                    <button onclick="appendToDisplay('3')">3</button>
+                    <button onclick="appendToDisplay('-')">-</button>
+                    <button onclick="appendToDisplay('4')">4</button>
+                    <button onclick="appendToDisplay('5')">5</button>
+                    <button onclick="appendToDisplay('6')">6</button>
+                    <button onclick="calculate()" style="background: #28a745; grid-row: span 3;">=</button>
+                    <button onclick="appendToDisplay('7')">7</button>
+                    <button onclick="appendToDisplay('8')">8</button>
+                    <button onclick="appendToDisplay('9')">9</button>
+                    <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+                    <button onclick="appendToDisplay('.')">.</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Calendário 📅</h2>
+            <div class="calendar">
+                <div class="month-header">
+                    <button onclick="changeMonth(-1)">❮</button>
+                    <h3 id="monthDisplay"></h3>
+                    <button onclick="changeMonth(1)">❯</button>
+                </div>
+                <ul class="weekdays">
+                    <li>Dom</li><li>Seg</li><li>Ter</li><li>Qua</li><li>Qui</li><li>Sex</li><li>Sáb</li>
+                </ul>
+                <ul class="days" id="calendarDays"></ul>
+            </div>
+            
+            <div id="calNoteArea">
+                <h4 style="margin-bottom: 10px;">Dia <span id="selectedDateLabel"></span></h4>
+                <div id="noteContent"></div> <div class="input-group" id="noteInputSection">
+                    <input type="text" id="dayNoteInput" placeholder="O que agendar?">
+                    <button onclick="saveDayNote()" style="background: #28a745;">Agendar</button>
+                </div>
+            </div>
+        </div>
+
+        <marquee><h3><span style="color: #5D1789">V.1.0 - beta - Tudo em um só lugar!</span></h3></marquee>
+    </div>
+
+<script>
+    // --- LÓGICA DE TAREFAS ---
+    function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks_v2')) || [];
+        const list = document.getElementById('taskList');
+        list.innerHTML = tasks.map((t, i) => `
+            <div class="item-tarefa ${t.done ? 'done' : ''}">
+                <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${i})">
+                <span>${t.text}</span>
+                <button class="btn-delete" onclick="deleteTask(${i})">Remover</button>
+            </div>
+        `).join('');
+    }
+
+    function addTask() {
+        const input = document.getElementById('taskInput');
+        if (!input.value.trim()) return;
+        const tasks = JSON.parse(localStorage.getItem('tasks_v2')) || [];
+        tasks.push({ text: input.value, done: false });
+        localStorage.setItem('tasks_v2', JSON.stringify(tasks));
+        input.value = "";
+        loadTasks();
+    }
+
+    function toggleTask(i) {
+        const tasks = JSON.parse(localStorage.getItem('tasks_v2'));
+        tasks[i].done = !tasks[i].done;
+        localStorage.setItem('tasks_v2', JSON.stringify(tasks));
+        loadTasks();
+    }
+
+    function deleteTask(i) {
+        const tasks = JSON.parse(localStorage.getItem('tasks_v2'));
+        tasks.splice(i, 1);
+        localStorage.setItem('tasks_v2', JSON.stringify(tasks));
+        loadTasks();
+    }
+
+    // --- CALCULADORA ---
+    const display = document.getElementById('display');
+    function appendToDisplay(v) { display.value += v; }
+    function clearDisplay() { display.value = ""; }
+    function calculate() {
+        try { display.value = eval(display.value); } 
+        catch { display.value = "Erro"; setTimeout(clearDisplay, 1000); }
+    }
+
+    // --- LÓGICA DO CALENDÁRIO COM REMOÇÃO ---
+    let navDate = new Date();
+    let selectedDayKey = "";
+
+    function renderCalendar() {
+        const daysUl = document.getElementById('calendarDays');
+        const monthLabel = document.getElementById('monthDisplay');
+        const m = navDate.getMonth();
+        const y = navDate.getFullYear();
+        
+        const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        monthLabel.innerText = `${months[m]} ${y}`;
+
+        const firstDay = new Date(y, m, 1).getDay();
+        const lastDay = new Date(y, m + 1, 0).getDate();
+        const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
+
+        daysUl.innerHTML = "";
+        for (let x = firstDay; x > 0; x--) daysUl.appendChild(document.createElement("li"));
+
+        for (let d = 1; d <= lastDay; d++) {
+            const li = document.createElement("li");
+            const key = `${d}-${m}-${y}`;
+            li.innerText = d;
+            if (notes[key]) li.classList.add('has-event');
+            if (d === new Date().getDate() && m === new Date().getMonth() && y === new Date().getFullYear()) li.classList.add('today');
+            
+            li.onclick = () => showDayDetails(d, m, y, key);
+            daysUl.appendChild(li);
+        }
+    }
+
+    function showDayDetails(d, m, y, key) {
+        selectedDayKey = key;
+        const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        document.getElementById('calNoteArea').style.display = 'block';
+        document.getElementById('selectedDateLabel').innerText = `${d} de ${months[m]}`;
+        
+        const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
+        const content = document.getElementById('noteContent');
+        
+        if (notes[key]) {
+            content.innerHTML = `
+                <div class="note-display">
+                    <span>${notes[key]}</span>
+                    <button onclick="deleteEvent('${key}')" style="background:red; padding:4px 8px; font-size:10px;">Apagar</button>
+                </div>
+            `;
+            document.getElementById('noteInputSection').style.display = 'none';
+        } else {
+            content.innerHTML = "<p style='color:gray; font-size:12px; margin-bottom:10px;'>Nada agendado.</p>";
+            document.getElementById('noteInputSection').style.display = 'flex';
+        }
+    }
+
+    function saveDayNote() {
+        const val = document.getElementById('dayNoteInput').value;
+        if (!val) return;
+        const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
+        notes[selectedDayKey] = val;
+        localStorage.setItem('cal_notes_v2', JSON.stringify(notes));
+        document.getElementById('dayNoteInput').value = "";
+        renderCalendar();
+        showDayDetails(...selectedDayKey.split('-').map(Number), selectedDayKey);
+    }
+
+    function deleteEvent(key) {
+        const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
+        delete notes[key];
+        localStorage.setItem('cal_notes_v2', JSON.stringify(notes));
+        renderCalendar();
+        showDayDetails(...key.split('-').map(Number), key);
+    }
+
+    function changeMonth(dir) {
+        navDate.setMonth(navDate.getMonth() + dir);
+        renderCalendar();
+        document.getElementById('calNoteArea').style.display = 'none';
+    }
+
+    // Inicialização
+    loadTasks();
+    renderCalendar();
+</script>
+</body>
+<footer>
+    <p>Desenvolvido por <strong>Lucas Marques</strong> &copy; 2026</p>
+</footer>
+</html>
