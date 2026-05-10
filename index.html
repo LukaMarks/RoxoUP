@@ -16,7 +16,7 @@
     
     body { 
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-        background: radial-gradient(circle at top right, #1a052e, #0f0f0f);
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a052e 50%, #1a052e 100%);
         color: #e0e0e0;
         display: flex; 
         flex-direction: column; 
@@ -155,6 +155,56 @@
 
     footer { background: rgba(0, 0, 0, 0.5); padding: 50px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; width: 100%; margin-top: 20px; }
     marquee { background: rgba(98, 0, 238, 0.1); padding: 8px 0; width: 100%; }
+    
+/* --- ADICIONE ISSO NO FINAL DO SEU <style> --- */
+
+/* 1. Definição do movimento: de invisível/baixo para visível/topo */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 2. Aplicação do efeito nos containers */
+.container { 
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0; 
+}
+
+/* 3. Efeito Cascata: cada bloco aparece com um pequeno atraso */
+.container:nth-child(1) { animation-delay: 0.1s; }
+.container:nth-child(2) { animation-delay: 0.2s; }
+.container:nth-child(3) { animation-delay: 0.3s; }
+.container:nth-child(4) { animation-delay: 0.4s; }
+.container:nth-child(5) { animation-delay: 0.5s; }
+.container:nth-child(6) { animation-delay: 0.6s; }
+
+/* 4. Suavizar TODAS as mudanças de estado no site */
+* {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* 5. Feedback visual ao passar o mouse nas tarefas */
+.item-tarefa:hover {
+    background: rgba(187, 134, 252, 0.1);
+    transform: translateX(8px); /* Desliza levemente para a direita */
+}
+
+/* 6. Brilho pulsante no título principal */
+center h1 {
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px rgba(187, 134, 252, 0.4); }
+    to { text-shadow: 0 0 25px rgba(187, 134, 252, 0.8); }
+}
+
 </style>
 </head>
 <body>
@@ -528,6 +578,13 @@
 
     loadTasks();
     renderCalendar();
+//usar o enter do teclado
+document.getElementById('taskInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        addTask();
+    }
+});
+
 </script>
 </body>
 <center>
