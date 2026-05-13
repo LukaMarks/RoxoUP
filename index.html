@@ -155,8 +155,6 @@
 
     footer { background: rgba(0, 0, 0, 0.5); padding: 50px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; width: 100%; margin-top: 20px; }
     marquee { background: rgba(98, 0, 238, 0.1); padding: 8px 0; width: 100%; }
-    
-/* --- ADICIONE ISSO NO FINAL DO SEU <style> --- */
 
 /* 1. Definição do movimento: de invisível/baixo para visível/topo */
 @keyframes fadeInUp {
@@ -293,7 +291,7 @@ center h1 {
             <div class="time-display" id="stopwatchDisplay">00:00:00</div>
             <div class="timer-controls">
                 <button id="swBtn" onclick="toggleStopwatch()">Iniciar</button>
-                <button onclick="resetStopwatch()" style="background: #cf6679;">Apagar</button>
+                <button onclick="resetStopwatch()" style="background: #b22222;">Apagar</button>
             </div>
         </div>
 
@@ -310,7 +308,7 @@ center h1 {
             <div class="time-display" id="timerDisplay">00:00:00</div>
             <div class="timer-controls">
                 <button id="tmBtn" onclick="toggleTimer()">Iniciar</button>
-                <button onclick="resetTimer()" style="background: #cf6679;">Apagar</button>
+                <button onclick="resetTimer()" style="background: #b22222;">Apagar</button>
             </div>
         </div>
 
@@ -329,7 +327,7 @@ center h1 {
             <div class="calc">
                 <input type="text" id="display" disabled>
                 <div class="buttons">
-                    <button onclick="clearDisplay()" style="background: #cf6679;">C</button>
+                    <button onclick="clearDisplay()" style="background: #b22222;">C</button>
                     <button onclick="appendToDisplay('/')">÷</button>
                     <button onclick="appendToDisplay('*')">×</button>
                     <button onclick="appendToDisplay('+')">+</button>
