@@ -216,36 +216,67 @@ center h1 {
     </center>
 </div>
 <div style="height: 20px;"></div>
-
-<div>
-<button onclick="toggleNoticias()" style="
-    background: rgba(20, 10, 35, 0.5); /* Fundo escuro com um toque de roxo, semi-transparente */
-    backdrop-filter: blur(10px); /* O efeito principal de vidro fosco */
-    -webkit-backdrop-filter: blur(10px); /* Suporte para navegadores da Apple */
-    color: white; 
-    border: 1px solid rgba(138, 43, 226, 0.6); /* Borda roxa translúcida */
-    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.25); /* Brilho roxo suave ao redor do botão */
-    border-radius: 15px; 
-    padding: 12px 24px; 
-    margin: 0 auto 20px auto; 
+<div style="
     display: flex; 
+    justify-content: center; 
     align-items: center; 
-    justify-content: center;
-    gap: 10px; 
-    font-family: sans-serif; 
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;">
-    <span>NOTÍCIAS📰</span>
-</button>
+    gap: 15px; 
+    margin: 0 auto 20px auto; 
+    max-width: 380px;
+">
+    <button onclick="toggleNoticias()" style="
+        flex: 1; 
+        background: rgba(20, 10, 35, 0.5); 
+        backdrop-filter: blur(10px); 
+        -webkit-backdrop-filter: blur(10px); 
+        color: white; 
+        border: 1px solid rgba(138, 43, 226, 0.6); 
+        box-shadow: 0 4px 15px rgba(138, 43, 226, 0.25); 
+        border-radius: 15px; 
+        padding: 12px 10px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        gap: 8px; 
+        font-family: sans-serif; 
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        cursor: pointer;">
+        📰 <span>NOTÍCIAS</span>
+    </button>
+
+    <button onclick="toggleClima()" style="
+        flex: 1; 
+        background: rgba(20, 10, 35, 0.5); 
+        backdrop-filter: blur(10px); 
+        -webkit-backdrop-filter: blur(10px); 
+        color: white; 
+        border: 1px solid rgba(138, 43, 226, 0.6); 
+        box-shadow: 0 4px 15px rgba(138, 43, 226, 0.25); 
+        border-radius: 15px; 
+        padding: 12px 10px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        gap: 8px; 
+        font-family: sans-serif; 
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        cursor: pointer;">
+        ☀️ <span>CLIMA</span>
+    </button>
+</div>
 
 <div id="container-noticias" style="
     display: none; 
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: black;
+    background: rgba(20, 10, 35, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 30px;
     border: 1px solid #3d2b5e;
@@ -253,7 +284,7 @@ center h1 {
     margin: 0 auto 30px auto;
     font-family: sans-serif;
 ">
-    <h3 style="color: white; margin-bottom: 0;">AO VIVO!</h3>
+    <h2 style="color: white; margin-bottom: 0;">Notícias 📰</h2>
     <h6 style="color: #b3a1d1; margin-top: 5px; font-weight: normal;">by g1.globo.com</h6>
     
     <iframe 
@@ -264,6 +295,133 @@ center h1 {
         style="border-radius: 20px; overflow: hidden;">
     </iframe>
 </div>
+
+<div id="container-clima" style="
+    display: none; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20, 10, 35, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 25px 20px;
+    border-radius: 30px;
+    border: 1px solid #3d2b5e;
+    max-width: 380px;
+    margin: 0 auto 30px auto;
+    font-family: sans-serif;
+    color: white;
+    text-align: center;
+">
+    <h2 style="margin-bottom: 10px;">Previsão do Tempo ☀️</h2>
+    
+    <div id="bloco-permissao">
+        <p style="color: #b3a1d1; font-size: 15px; margin-bottom: 20px; line-height: 1.4;">
+            <strong>RoxoUP</strong> deseja saber sua localização.<br>Deseja permitir para exibir o clima da sua cidade?
+        </p>
+        <button onclick="solicitarLocalizacaoReal()" style="
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        ">Permitir Localização</button>
+    </div>
+
+    <div id="dados-clima" style="display: none;">
+        <h4 id="clima-cidade" style="color: #b3a1d1; margin-top: 0; font-weight: normal;">--</h4>
+        <div style="font-size: 48px; font-weight: bold; margin: 15px 0;" id="clima-temp">--°C</div>
+        <div id="clima-descricao" style="font-size: 18px; text-transform: capitalize; color: #b3a1d1;">Carregando...</div>
+    </div>
+</div>
+
+
+<script>
+    function toggleNoticias() {
+        const noticias = document.getElementById('container-noticias');
+        const clima = document.getElementById('container-clima');
+        clima.style.display = 'none';
+        
+        if (noticias.style.display === 'none' || noticias.style.display === '') {
+            noticias.style.display = 'flex';
+        } else {
+            noticias.style.display = 'none';
+        }
+    }
+
+    function toggleClima() {
+        const noticias = document.getElementById('container-noticias');
+        const clima = document.getElementById('container-clima');
+        noticias.style.display = 'none';
+        
+        if (clima.style.display === 'none' || clima.style.display === '') {
+            clima.style.display = 'flex';
+            
+            // Se já buscou o clima antes, pula a mensagem de permissão e mostra direto os dados
+            if (document.getElementById('clima-temp').innerText !== '--°C') {
+                document.getElementById('bloco-permissao').style.display = 'none';
+                document.getElementById('dados-clima').style.display = 'block';
+            }
+        } else {
+            clima.style.display = 'none';
+        }
+    }
+
+    // Função que é chamada pelo botão verde de permissão
+    function solicitarLocalizacaoReal() {
+        const blocoPermissao = document.getElementById('bloco-permissao');
+        const dadosClima = document.getElementById('dados-clima');
+        const cidadeElement = document.getElementById('clima-cidade');
+        const descElement = document.getElementById('clima-descricao');
+        const tempElement = document.getElementById('clima-temp');
+
+        if (navigator.geolocation) {
+            // Dispara a janelinha nativa do navegador
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    // Usuário aceitou! Esconde o aviso e mostra a área do clima
+                    blocoPermissao.style.display = 'none';
+                    dadosClima.style.display = 'block';
+
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const url = `https://api.hgbrasil.com/weather?format=json-cors&key=development&lat=${lat}&lon=${lon}`;
+
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            const res = data.results;
+                            cidadeElement.innerText = res.city;
+                            tempElement.innerText = `${res.temp}°C`;
+                            descElement.innerText = res.description;
+                        })
+                        .catch(error => {
+                            console.error('Erro:', error);
+                            descElement.innerText = 'Erro ao carregar dados.';
+                        });
+                },
+                (error) => {
+                    // Usuário recusou na caixa do navegador
+                    console.error('Recusado:', error);
+                    blocoPermissao.innerHTML = `
+                        <p style="color: #ff4a4a; font-size: 14px; margin: 0;">
+                            Acesso bloqueado. Ative as permissões de localização do seu navegador para usar esta função.
+                        </p>
+                    `;
+                }
+            );
+        } else {
+            blocoPermissao.innerHTML = `<p style="color: #ff4a4a;">Navegador incompatível.</p>`;
+        }
+    }
+</script>
+
+
+
 
 </div>
     <div class="content">
@@ -636,17 +794,6 @@ document.getElementById('taskInput').addEventListener('keypress', function (e) {
         addTask();
     }
 });
-//noticias
-    function toggleNoticias() {
-        const container = document.getElementById('container-noticias');
-        
-        // Se estiver escondido, muda para flex. Se estiver aparecendo, muda para none.
-        if (container.style.display === 'none' || container.style.display === '') {
-            container.style.display = 'flex';
-        } else {
-            container.style.display = 'none';
-        }
-    }
 
 </script>
 </div>
