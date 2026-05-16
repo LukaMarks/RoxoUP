@@ -341,10 +341,15 @@ center h1 {
 
 
 <script>
+    // ==========================================
+    // NOTÍCIAS: Mantém funcionando perfeitamente
+    // ==========================================
     function toggleNoticias() {
         const noticias = document.getElementById('container-noticias');
         const clima = document.getElementById('container-clima');
-        clima.style.display = 'none';
+        
+        // Garante que o clima fecha quando abrir notícias
+        if (clima) clima.style.display = 'none';
         
         if (noticias.style.display === 'none' || noticias.style.display === '') {
             noticias.style.display = 'flex';
@@ -353,25 +358,32 @@ center h1 {
         }
     }
 
+    // ==========================================
+    // CLIMA: Controla a abertura da caixa
+    // ==========================================
     function toggleClima() {
         const noticias = document.getElementById('container-noticias');
         const clima = document.getElementById('container-clima');
-        noticias.style.display = 'none';
+        
+        // Garante que as notícias fecham quando abrir o clima
+        if (noticias) noticias.style.display = 'none';
         
         if (clima.style.display === 'none' || clima.style.display === '') {
             clima.style.display = 'flex';
             
             // Se já buscou o clima antes, pula a mensagem de permissão e mostra direto os dados
             if (document.getElementById('clima-temp').innerText !== '--°C') {
-                document.getElementById('bloco-permissao').style.display = 'none';
-                document.getElementById('dados-clima').style.display = 'block';
+                if (document.getElementById('bloco-permissao')) document.getElementById('bloco-permissao').style.display = 'none';
+                if (document.getElementById('dados-clima')) document.getElementById('dados-clima').style.display = 'block';
             }
         } else {
             clima.style.display = 'none';
         }
     }
 
-    // Função que é chamada pelo botão verde de permissão
+    // ==========================================
+    // NOVA LOGICA DO CLIMA: Segura via HTTPS (Open-Meteo)
+    // ==========================================
     function solicitarLocalizacaoReal() {
         const blocoPermissao = document.getElementById('bloco-permissao');
         const dadosClima = document.getElementById('dados-clima');
@@ -380,24 +392,40 @@ center h1 {
         const tempElement = document.getElementById('clima-temp');
 
         if (navigator.geolocation) {
-            // Dispara a janelinha nativa do navegador
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    // Usuário aceitou! Esconde o aviso e mostra a área do clima
-                    blocoPermissao.style.display = 'none';
-                    dadosClima.style.display = 'block';
+                    if (blocoPermissao) blocoPermissao.style.display = 'none';
+                    if (dadosClima) dadosClima.style.display = 'block';
 
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
-                    const url = `https://api.hgbrasil.com/weather?format=json-cors&key=development&lat=${lat}&lon=${lon}`;
 
-                    fetch(url)
-                        .then(response => response.json())
+                    // Chamada segura para pegar temperatura e condições de clima
+                    const urlClima = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`;
+
+                    fetch(urlClima)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Erro na requisição');
+                            return response.json();
+                        })
                         .then(data => {
-                            const res = data.results;
-                            cidadeElement.innerText = res.city;
-                            tempElement.innerText = `${res.temp}°C`;
-                            descElement.innerText = res.description;
+                            const tempInt = Math.round(data.current.temperature_2m);
+                            const code = data.current.weather_code;
+                            
+                            tempElement.innerText = `${tempInt}°C`;
+                            descElement.innerText = traduzirCodigoClima(code);
+
+                            // Consulta reversa segura para descobrir o nome real da cidade pelas coordenadas
+                            const urlCidade = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+                            fetch(urlCidade)
+                                .then(res => res.json())
+                                .then(loc => {
+                                    const cidade = loc.address.city || loc.address.town || loc.address.village || "Sua Cidade";
+                                    cidadeElement.innerText = cidade;
+                                })
+                                .catch(() => {
+                                    cidadeElement.innerText = "Localização Atual";
+                                });
                         })
                         .catch(error => {
                             console.error('Erro:', error);
@@ -405,20 +433,35 @@ center h1 {
                         });
                 },
                 (error) => {
-                    // Usuário recusou na caixa do navegador
                     console.error('Recusado:', error);
-                    blocoPermissao.innerHTML = `
-                        <p style="color: #ff4a4a; font-size: 14px; margin: 0;">
-                            Acesso bloqueado. Ative as permissões de localização do seu navegador para usar esta função.
-                        </p>
-                    `;
+                    if (blocoPermissao) {
+                        blocoPermissao.innerHTML = `
+                            <p style="color: #ff4a4a; font-size: 14px; margin: 0; padding: 10px;">
+                                Acesso bloqueado. Ative as permissões de localização do seu navegador para ver o clima.
+                            </p>
+                        `;
+                    }
                 }
             );
         } else {
-            blocoPermissao.innerHTML = `<p style="color: #ff4a4a;">Navegador incompatível.</p>`;
+            if (blocoPermissao) blocoPermissao.innerHTML = `<p style="color: #ff4a4a;">Navegador incompatível.</p>`;
         }
     }
+
+    // Tradução dos códigos meteorológicos da API para o RoxoUP
+    function traduzirCodigoClima(code) {
+        if (code === 0) return "Céu limpo ☀️";
+        if (code >= 1 && code <= 3) return "Parcialmente nublado ⛅";
+        if (code >= 45 && code <= 48) return "Névoa ou nevoeiro 🌫️";
+        if (code >= 51 && code <= 55) return "Chuva leve / Chuvisco 🌧️";
+        if (code >= 61 && code <= 65) return "Chuva constante 🌧️";
+        if (code >= 71 && code <= 77) return "Queda de neve ❄️";
+        if (code >= 80 && code <= 82) return "Pancadas de chuva 🌦️";
+        if (code >= 95 && code <= 99) return "Tempestade com trovoadas ⛈️";
+        return "Tempo estável";
+    }
 </script>
+
 
 
 
