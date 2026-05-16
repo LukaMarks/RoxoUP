@@ -338,51 +338,52 @@ center h1 {
         <div id="clima-descricao" style="font-size: 18px; text-transform: capitalize; color: #b3a1d1;">Carregando...</div>
     </div>
 </div>
-
-
 <script>
     // ==========================================
-    // NOTÍCIAS: Mantém funcionando perfeitamente
+    // NOTÍCIAS: Abre e fecha a caixa de notícias
     // ==========================================
     function toggleNoticias() {
         const noticias = document.getElementById('container-noticias');
         const clima = document.getElementById('container-clima');
         
-        // Garante que o clima fecha quando abrir notícias
         if (clima) clima.style.display = 'none';
         
-        if (noticias.style.display === 'none' || noticias.style.display === '') {
-            noticias.style.display = 'flex';
-        } else {
-            noticias.style.display = 'none';
+        if (noticias) {
+            if (noticias.style.display === 'none' || noticias.style.display === '') {
+                noticias.style.display = 'flex';
+            } else {
+                noticias.style.display = 'none';
+            }
         }
     }
 
     // ==========================================
-    // CLIMA: Controla a abertura da caixa
+    // CLIMA: Abre e fecha a caixa de clima
     // ==========================================
     function toggleClima() {
         const noticias = document.getElementById('container-noticias');
         const clima = document.getElementById('container-clima');
         
-        // Garante que as notícias fecham quando abrir o clima
         if (noticias) noticias.style.display = 'none';
         
-        if (clima.style.display === 'none' || clima.style.display === '') {
-            clima.style.display = 'flex';
-            
-            // Se já buscou o clima antes, pula a mensagem de permissão e mostra direto os dados
-            if (document.getElementById('clima-temp').innerText !== '--°C') {
-                if (document.getElementById('bloco-permissao')) document.getElementById('bloco-permissao').style.display = 'none';
-                if (document.getElementById('dados-clima')) document.getElementById('dados-clima').style.display = 'block';
+        if (clima) {
+            if (clima.style.display === 'none' || clima.style.display === '') {
+                clima.style.display = 'flex';
+                
+                // Se o clima já tiver carregado dados reais, pula o aviso e mostra direto
+                const tempText = document.getElementById('clima-temp') ? document.getElementById('clima-temp').innerText : '--°C';
+                if (tempText !== '--°C') {
+                    if (document.getElementById('bloco-permissao')) document.getElementById('bloco-permissao').style.display = 'none';
+                    if (document.getElementById('dados-clima')) document.getElementById('dados-clima').style.display = 'block';
+                }
+            } else {
+                clima.style.display = 'none';
             }
-        } else {
-            clima.style.display = 'none';
         }
     }
 
     // ==========================================
-    // NOVA LOGICA DO CLIMA: Segura via HTTPS (Open-Meteo)
+    // LÓGICA DO CLIMA VIA HTTPS (Open-Meteo)
     // ==========================================
     function solicitarLocalizacaoReal() {
         const blocoPermissao = document.getElementById('bloco-permissao');
@@ -400,7 +401,7 @@ center h1 {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
 
-                    // Chamada segura para pegar temperatura e condições de clima
+                    // URL Segura em HTTPS da Open-Meteo
                     const urlClima = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`;
 
                     fetch(urlClima)
@@ -412,24 +413,24 @@ center h1 {
                             const tempInt = Math.round(data.current.temperature_2m);
                             const code = data.current.weather_code;
                             
-                            tempElement.innerText = `${tempInt}°C`;
-                            descElement.innerText = traduzirCodigoClima(code);
+                            if (tempElement) tempElement.innerText = `${tempInt}°C`;
+                            if (descElement) descElement.innerText = traduzirCodigoClima(code);
 
-                            // Consulta reversa segura para descobrir o nome real da cidade pelas coordenadas
+                            // API de consulta reversa para pegar o nome da cidade em português pelas coordenadas
                             const urlCidade = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
                             fetch(urlCidade)
                                 .then(res => res.json())
                                 .then(loc => {
                                     const cidade = loc.address.city || loc.address.town || loc.address.village || "Sua Cidade";
-                                    cidadeElement.innerText = cidade;
+                                    if (cidadeElement) cidadeElement.innerText = cidade;
                                 })
                                 .catch(() => {
-                                    cidadeElement.innerText = "Localização Atual";
+                                    if (cidadeElement) cidadeElement.innerText = "Localização Atual";
                                 });
                         })
                         .catch(error => {
                             console.error('Erro:', error);
-                            descElement.innerText = 'Erro ao carregar dados.';
+                            if (descElement) descElement.innerText = 'Erro ao carregar dados.';
                         });
                 },
                 (error) => {
@@ -448,7 +449,7 @@ center h1 {
         }
     }
 
-    // Tradução dos códigos meteorológicos da API para o RoxoUP
+    // Tradutor de códigos climáticos internacionais para o português
     function traduzirCodigoClima(code) {
         if (code === 0) return "Céu limpo ☀️";
         if (code >= 1 && code <= 3) return "Parcialmente nublado ⛅";
