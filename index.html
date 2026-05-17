@@ -206,6 +206,46 @@ center h1 {
 </style>
 </head>
 <body>
+  <div style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #1a0b2e 0%, #000000 100%);
+    z-index: -1;
+    overflow: hidden;
+">
+    <svg style="position: absolute; width: 100%; height: 100%;" viewBox="0 0 1440 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,400 Q360,250 720,400 T1440,400 L1440,800 L0,800 Z" fill="rgba(61, 43, 94, 0.15)">
+            <animate attributeName="d" 
+                dur="15s" 
+                repeatCount="indefinite"
+                values="M0,400 Q360,250 720,400 T1440,400 L1440,800 L0,800 Z;
+                        M0,400 Q360,550 720,400 T1440,400 L1440,800 L0,800 Z;
+                        M0,400 Q360,250 720,400 T1440,400 L1440,800 L0,800 Z" />
+        </path>
+        
+        <path d="M0,450 Q360,550 720,450 T1440,450 L1440,800 L0,800 Z" fill="rgba(138, 43, 226, 0.1)">
+            <animate attributeName="d" 
+                dur="12s" 
+                repeatCount="indefinite"
+                values="M0,450 Q360,550 720,450 T1440,450 L1440,800 L0,800 Z;
+                        M0,450 Q360,300 720,450 T1440,450 L1440,800 L0,800 Z;
+                        M0,450 Q360,550 720,450 T1440,450 L1440,800 L0,800 Z" />
+        </path>
+
+        <path d="M0,500 Q360,350 720,500 T1440,500 L1440,800 L0,800 Z" fill="rgba(180, 140, 255, 0.08)">
+            <animate attributeName="d" 
+                dur="9s" 
+                repeatCount="indefinite"
+                values="M0,500 Q360,350 720,500 T1440,500 L1440,800 L0,800 Z;
+                        M0,500 Q360,600 720,500 T1440,500 L1440,800 L0,800 Z;
+                        M0,500 Q360,350 720,500 T1440,500 L1440,800 L0,800 Z" />
+        </path>
+    </svg>
+</div>
+
 
     <center>
       <img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png" style="width: 100px; border-radius: 30%; margin: 10px 0;">
