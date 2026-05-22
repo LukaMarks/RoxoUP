@@ -2,20 +2,21 @@
   "name": "RoxoUP Produtividade",
   "short_name": "RoxoUP",
   "description": "Seu sistema centralizado de produtividade.",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#110b1a",
   "theme_color": "#6a0dad",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+
