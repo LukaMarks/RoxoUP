@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoxoUP</title>
     <link rel="icon" type="image/png" sizes="192x192" href="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png">
-<link rel="shortcut icon" href="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png" type="image/x-icon">
-
-<link rel="apple-touch-icon" href="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png">
-
+    <link rel="shortcut icon" href="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png">
     <meta name="msapplication-navbutton-color" content="#1a052e">
+
 <style>
     /* Reset e Base Moderna */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -156,89 +155,91 @@
     footer { background: rgba(0, 0, 0, 0.5); padding: 50px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; width: 100%; margin-top: 20px; }
     marquee { background: rgba(98, 0, 238, 0.1); padding: 8px 0; width: 100%; }
 
-/* 1. Definição do movimento: de invisível/baixo para visível/topo */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
+    /* Divisor visual entre seções */
+    .section-divider {
+        width: 100%;
+        max-width: 450px;
+        margin: 10px auto 25px auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .section-divider hr {
+        flex: 1;
+        border: none;
+        border-top: 1px solid rgba(187, 134, 252, 0.3);
     }
-}
+    .section-divider span {
+        font-size: 11px;
+        color: #bb86fc;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
 
-/* 2. Aplicação do efeito nos containers */
-.container { 
-    animation: fadeInUp 0.8s ease-out forwards;
-    opacity: 0; 
-}
+    /* Animações */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-/* 3. Efeito Cascata: cada bloco aparece com um pequeno atraso */
-.container:nth-child(1) { animation-delay: 0.1s; }
-.container:nth-child(2) { animation-delay: 0.2s; }
-.container:nth-child(3) { animation-delay: 0.3s; }
-.container:nth-child(4) { animation-delay: 0.4s; }
-.container:nth-child(5) { animation-delay: 0.5s; }
-.container:nth-child(6) { animation-delay: 0.6s; }
+    .container { 
+        animation: fadeInUp 0.8s ease-out forwards;
+        opacity: 0; 
+    }
 
-/* 4. Suavizar TODAS as mudanças de estado no site */
-* {
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
+    .container:nth-child(1) { animation-delay: 0.1s; }
+    .container:nth-child(2) { animation-delay: 0.2s; }
+    .container:nth-child(3) { animation-delay: 0.3s; }
+    .container:nth-child(4) { animation-delay: 0.4s; }
+    .container:nth-child(5) { animation-delay: 0.5s; }
+    .container:nth-child(6) { animation-delay: 0.6s; }
 
-/* 5. Feedback visual ao passar o mouse nas tarefas */
-.item-tarefa:hover {
-    background: rgba(187, 134, 252, 0.1);
-    transform: translateX(8px); /* Desliza levemente para a direita */
-}
+    * {
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
 
-/* 6. Brilho pulsante no título principal */
-center h1 {
-    animation: glow 2s ease-in-out infinite alternate;
-}
+    .item-tarefa:hover {
+        background: rgba(187, 134, 252, 0.1);
+        transform: translateX(8px);
+    }
 
-@keyframes glow {
-    from { text-shadow: 0 0 10px rgba(187, 134, 252, 0.4); }
-    to { text-shadow: 0 0 25px rgba(187, 134, 252, 0.8); }
-}
+    center h1 {
+        animation: glow 2s ease-in-out infinite alternate;
+    }
 
+    @keyframes glow {
+        from { text-shadow: 0 0 10px rgba(187, 134, 252, 0.4); }
+        to { text-shadow: 0 0 25px rgba(187, 134, 252, 0.8); }
+    }
 </style>
 </head>
 <body>
-  <div style="
+
+<!-- Fundo animado -->
+<div style="
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     background: radial-gradient(circle at center, #1a0b2e 0%, #000000 100%);
     z-index: -1;
     overflow: hidden;
 ">
     <svg style="position: absolute; width: 100%; height: 100%;" viewBox="0 0 1440 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0,400 Q360,250 720,400 T1440,400 L1440,800 L0,800 Z" fill="rgba(61, 43, 94, 0.15)">
-            <animate attributeName="d" 
-                dur="15s" 
-                repeatCount="indefinite"
+            <animate attributeName="d" dur="15s" repeatCount="indefinite"
                 values="M0,400 Q360,250 720,400 T1440,400 L1440,800 L0,800 Z;
                         M0,400 Q360,550 720,400 T1440,400 L1440,800 L0,800 Z;
                         M0,400 Q360,250 720,400 T1440,400 L1440,800 L0,800 Z" />
         </path>
-        
         <path d="M0,450 Q360,550 720,450 T1440,450 L1440,800 L0,800 Z" fill="rgba(138, 43, 226, 0.1)">
-            <animate attributeName="d" 
-                dur="12s" 
-                repeatCount="indefinite"
+            <animate attributeName="d" dur="12s" repeatCount="indefinite"
                 values="M0,450 Q360,550 720,450 T1440,450 L1440,800 L0,800 Z;
                         M0,450 Q360,300 720,450 T1440,450 L1440,800 L0,800 Z;
                         M0,450 Q360,550 720,450 T1440,450 L1440,800 L0,800 Z" />
         </path>
-
         <path d="M0,500 Q360,350 720,500 T1440,500 L1440,800 L0,800 Z" fill="rgba(180, 140, 255, 0.08)">
-            <animate attributeName="d" 
-                dur="9s" 
-                repeatCount="indefinite"
+            <animate attributeName="d" dur="9s" repeatCount="indefinite"
                 values="M0,500 Q360,350 720,500 T1440,500 L1440,800 L0,800 Z;
                         M0,500 Q360,600 720,500 T1440,500 L1440,800 L0,800 Z;
                         M0,500 Q360,350 720,500 T1440,500 L1440,800 L0,800 Z" />
@@ -246,17 +247,18 @@ center h1 {
     </svg>
 </div>
 
+<!-- Header / Logo -->
+<center>
+    <img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png" style="width: 100px; border-radius: 30%; margin: 10px 0;">
+</center>
+<center>
+    <img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i220f15bb80f439d5/version/1778370576/image.png" style="width: 300px; border-radius: 1%; margin: 1px 0;">
+    <h5>by @Lukamarks</h5>
+</center>
 
-    <center>
-      <img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i78cc78006ee61263/version/1777855799/image.png" style="width: 100px; border-radius: 30%; margin: 10px 0;">
-      </center>
-      <center>
-        <img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s56d93db07e4fff92/image/i220f15bb80f439d5/version/1778370576/image.png" style="width: 300px; border-radius: 1%; margin: 1px 0;">
-        <h5>by @Lukamarks</h5>
-    </center>
-</div>
 <div style="height: 20px;"></div>
 
+<!-- Botões Notícias e Clima -->
 <div style="
     display: flex; 
     justify-content: center; 
@@ -271,180 +273,95 @@ center h1 {
     border-radius: 20px;
     border: 1px solid rgba(138, 43, 226, 0.3);
 ">
-
     <button onclick="toggleNoticias()" style="
-        flex: 1;
-        background: transparent;
-        border: none;
-        display: flex; 
-        align-items: center; 
-        justify-content: flex-start;
-        gap: 12px; 
-        padding: 6px;
-        cursor: pointer;
+        flex: 1; background: transparent; border: none;
+        display: flex; align-items: center; justify-content: flex-start;
+        gap: 12px; padding: 6px; cursor: pointer;
         -webkit-tap-highlight-color: transparent;
     ">
         <div style="
-            width: 45px;
-            height: 45px;
-            background: #3d2b5e;
-            border: 1px solid rgba(138, 43, 226, 0.6);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 45px; height: 45px; background: #3d2b5e;
+            border: 1px solid rgba(138, 43, 226, 0.6); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
         ">
             <span style="font-size: 22px; color: white;">📰</span>
         </div>
-        <span style="
-            color: white;
-            font-family: sans-serif; 
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        ">NOTÍCIAS</span>
+        <span style="color: white; font-family: sans-serif; font-size: 14px; font-weight: bold; letter-spacing: 1px;">NOTÍCIAS</span>
     </button>
 
     <button onclick="toggleClima()" style="
-        flex: 1;
-        background: transparent;
-        border: none;
-        display: flex; 
-        align-items: center; 
-        justify-content: flex-start;
-        gap: 12px; 
-        padding: 6px;
-        cursor: pointer;
+        flex: 1; background: transparent; border: none;
+        display: flex; align-items: center; justify-content: flex-start;
+        gap: 12px; padding: 6px; cursor: pointer;
         -webkit-tap-highlight-color: transparent;
     ">
         <div style="
-            width: 45px;
-            height: 45px;
-            background: #3d2b5e;
-            border: 1px solid rgba(138, 43, 226, 0.6);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 45px; height: 45px; background: #3d2b5e;
+            border: 1px solid rgba(138, 43, 226, 0.6); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
         ">
             <span style="font-size: 22px; color: white;">⛅</span>
         </div>
-        <span style="
-            color: white;
-            font-family: sans-serif; 
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        ">CLIMA</span>
+        <span style="color: white; font-family: sans-serif; font-size: 14px; font-weight: bold; letter-spacing: 1px;">CLIMA</span>
     </button>
-
 </div>
 
-
+<!-- Container Notícias -->
 <div id="container-noticias" style="
-    display: none; 
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(20, 10, 35, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 20px;
-    border-radius: 30px;
-    border: 1px solid #3d2b5e;
-    max-width: 380px;
-    margin: 0 auto 30px auto;
-    font-family: sans-serif;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(20, 10, 35, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    padding: 20px; border-radius: 30px; border: 1px solid #3d2b5e;
+    max-width: 380px; margin: 0 auto 30px auto; font-family: sans-serif;
 ">
     <h2 style="color: white; margin-bottom: 0;">Notícias 📰</h2>
     <h6 style="color: #b3a1d1; margin-top: 5px; font-weight: normal;">by g1.globo.com</h6>
-    
-    <iframe 
-        width="100%" 
-        height="500" 
-        src="https://rss.app/embed/v1/wall/5zpgqzsfC8yC3uyG" 
-        frameborder="0" 
-        style="border-radius: 20px; overflow: hidden;">
-    </iframe>
+    <iframe width="100%" height="500" src="https://rss.app/embed/v1/wall/5zpgqzsfC8yC3uyG" frameborder="0" style="border-radius: 20px; overflow: hidden;"></iframe>
 </div>
 
+<!-- Container Clima -->
 <div id="container-clima" style="
-    display: none; 
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(20, 10, 35, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 25px 20px;
-    border-radius: 30px;
-    border: 1px solid #3d2b5e;
-    max-width: 380px;
-    margin: 0 auto 30px auto;
-    font-family: sans-serif;
-    color: white;
-    text-align: center;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(20, 10, 35, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    padding: 25px 20px; border-radius: 30px; border: 1px solid #3d2b5e;
+    max-width: 380px; margin: 0 auto 30px auto; font-family: sans-serif; color: white; text-align: center;
 ">
     <h2 style="margin-bottom: 10px;">Previsão do Tempo ☀️</h2>
-    
     <div id="bloco-permissao">
         <p style="color: #b3a1d1; font-size: 15px; margin-bottom: 20px; line-height: 1.4;">
             <strong>RoxoUP</strong> deseja saber sua localização.<br>Deseja permitir para exibir o clima da sua cidade?
         </p>
         <button onclick="solicitarLocalizacaoReal()" style="
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
+            background: #28a745; color: white; border: none; padding: 10px 20px;
+            border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px;
             box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
         ">Permitir Localização</button>
     </div>
-
     <div id="dados-clima" style="display: none;">
         <h4 id="clima-cidade" style="color: #b3a1d1; margin-top: 0; font-weight: normal;">--</h4>
         <div style="font-size: 48px; font-weight: bold; margin: 15px 0;" id="clima-temp">--°C</div>
         <div id="clima-descricao" style="font-size: 18px; text-transform: capitalize; color: #b3a1d1;">Carregando...</div>
     </div>
 </div>
+
 <script>
-    // ==========================================
-    // NOTÍCIAS: Abre e fecha a caixa de notícias
-    // ==========================================
     function toggleNoticias() {
         const noticias = document.getElementById('container-noticias');
         const clima = document.getElementById('container-clima');
-        
         if (clima) clima.style.display = 'none';
-        
         if (noticias) {
-            if (noticias.style.display === 'none' || noticias.style.display === '') {
-                noticias.style.display = 'flex';
-            } else {
-                noticias.style.display = 'none';
-            }
+            noticias.style.display = (noticias.style.display === 'none' || noticias.style.display === '') ? 'flex' : 'none';
         }
     }
 
-    // ==========================================
-    // CLIMA: Abre e fecha a caixa de clima
-    // ==========================================
     function toggleClima() {
         const noticias = document.getElementById('container-noticias');
         const clima = document.getElementById('container-clima');
-        
         if (noticias) noticias.style.display = 'none';
-        
         if (clima) {
             if (clima.style.display === 'none' || clima.style.display === '') {
                 clima.style.display = 'flex';
-                
-                // Se o clima já tiver carregado dados reais, pula o aviso e mostra direto
                 const tempText = document.getElementById('clima-temp') ? document.getElementById('clima-temp').innerText : '--°C';
                 if (tempText !== '--°C') {
                     if (document.getElementById('bloco-permissao')) document.getElementById('bloco-permissao').style.display = 'none';
@@ -456,9 +373,6 @@ center h1 {
         }
     }
 
-    // ==========================================
-    // LÓGICA DO CLIMA VIA HTTPS (Open-Meteo)
-    // ==========================================
     function solicitarLocalizacaoReal() {
         const blocoPermissao = document.getElementById('bloco-permissao');
         const dadosClima = document.getElementById('dados-clima');
@@ -471,26 +385,16 @@ center h1 {
                 (position) => {
                     if (blocoPermissao) blocoPermissao.style.display = 'none';
                     if (dadosClima) dadosClima.style.display = 'block';
-
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
-
-                    // URL Segura em HTTPS da Open-Meteo
                     const urlClima = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`;
-
                     fetch(urlClima)
-                        .then(response => {
-                            if (!response.ok) throw new Error('Erro na requisição');
-                            return response.json();
-                        })
+                        .then(response => { if (!response.ok) throw new Error('Erro na requisição'); return response.json(); })
                         .then(data => {
                             const tempInt = Math.round(data.current.temperature_2m);
                             const code = data.current.weather_code;
-                            
                             if (tempElement) tempElement.innerText = `${tempInt}°C`;
                             if (descElement) descElement.innerText = traduzirCodigoClima(code);
-
-                            // API de consulta reversa para pegar o nome da cidade em português pelas coordenadas
                             const urlCidade = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
                             fetch(urlCidade)
                                 .then(res => res.json())
@@ -498,23 +402,14 @@ center h1 {
                                     const cidade = loc.address.city || loc.address.town || loc.address.village || "Sua Cidade";
                                     if (cidadeElement) cidadeElement.innerText = cidade;
                                 })
-                                .catch(() => {
-                                    if (cidadeElement) cidadeElement.innerText = "Localização Atual";
-                                });
+                                .catch(() => { if (cidadeElement) cidadeElement.innerText = "Localização Atual"; });
                         })
-                        .catch(error => {
-                            console.error('Erro:', error);
-                            if (descElement) descElement.innerText = 'Erro ao carregar dados.';
-                        });
+                        .catch(error => { console.error('Erro:', error); if (descElement) descElement.innerText = 'Erro ao carregar dados.'; });
                 },
                 (error) => {
                     console.error('Recusado:', error);
                     if (blocoPermissao) {
-                        blocoPermissao.innerHTML = `
-                            <p style="color: #ff4a4a; font-size: 14px; margin: 0; padding: 10px;">
-                                Acesso bloqueado. Ative as permissões de localização do seu navegador para ver o clima.
-                            </p>
-                        `;
+                        blocoPermissao.innerHTML = `<p style="color: #ff4a4a; font-size: 14px; margin: 0; padding: 10px;">Acesso bloqueado. Ative as permissões de localização do seu navegador para ver o clima.</p>`;
                     }
                 }
             );
@@ -523,7 +418,6 @@ center h1 {
         }
     }
 
-    // Tradutor de códigos climáticos internacionais para o português
     function traduzirCodigoClima(code) {
         if (code === 0) return "Céu limpo ☀️";
         if (code >= 1 && code <= 3) return "Parcialmente nublado ⛅";
@@ -538,11 +432,18 @@ center h1 {
 </script>
 
 
-
-
-
+<!-- ============================================ -->
+<!--         SEÇÃO: INTELIGÊNCIA ARTIFICIAL       -->
+<!-- ============================================ -->
+<div class="section-divider" style="margin: 0 auto 20px auto;">
+    <hr>
+    <span>🤖 Inteligência Artificial</span>
+    <hr>
 </div>
-    <div class="content">
+
+<div class="content" style="padding-bottom: 0;">
+    <center>
+        <!-- Configuração da API Key -->
         <div class="container" style="border: 1px solid #bb86fc;">
             <h2>Configure sua RoxoUP AI 🤖🔑</h2>
             <h5>aistudio.google.com → Get API Key → Cole sua chave no campo abaixo↓</h5>
@@ -553,6 +454,7 @@ center h1 {
             <p id="keyStatus" style="font-size: 11px; margin-top: 5px; color: #03dac6;"></p>
         </div>
 
+        <!-- Chat com IA -->
         <div class="container">
             <h1>RoxoUP IA 🤖✨</h1>
             <h5>by Google Gemini</h5>
@@ -562,9 +464,64 @@ center h1 {
             </div>
             <div id="iaResponse"></div>
         </div>
+    </center>
+</div>
 
-<div>
-  <center>
+<script>
+    function saveApiKey() {
+        const key = document.getElementById('apiKeyInput').value.trim();
+        if (!key) return alert("Por favor, insira a chave!");
+        localStorage.setItem('gemini_api_key', key);
+        document.getElementById('keyStatus').innerText = "✅ Chave salva e pronta para uso!";
+        document.getElementById('apiKeyInput').value = "";
+    }
+
+    async function askAI() {
+        const savedKey = localStorage.getItem('gemini_api_key');
+        if (!savedKey) return alert("Vá em 'Configurar Gemini IA' e salve sua chave primeiro!");
+        const input = document.getElementById('iaInput');
+        const responseDiv = document.getElementById('iaResponse');
+        const btn = document.getElementById('btnIA');
+        if (!input.value.trim()) return;
+        btn.innerText = "Pensando...";
+        btn.disabled = true;
+        responseDiv.style.display = "block";
+        responseDiv.innerText = "Consultando os servidores do Google...";
+        try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${savedKey}`;
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: input.value }] }] })
+            });
+            const data = await response.json();
+            if (data.error) { responseDiv.innerText = "Erro na API: " + data.error.message; return; }
+            if (data.candidates && data.candidates[0].content) {
+                responseDiv.innerText = data.candidates[0].content.parts[0].text;
+            } else {
+                responseDiv.innerText = "O Gemini não conseguiu processar esta resposta.";
+            }
+        } catch (e) {
+            responseDiv.innerText = "Erro de rede. Verifique sua conexão.";
+        } finally {
+            btn.innerText = "Perguntar à IA";
+            btn.disabled = false;
+        }
+    }
+</script>
+
+
+<!-- ============================================ -->
+<!--         SEÇÃO: FERRAMENTAS / FIXTURES        -->
+<!-- ============================================ -->
+<div class="section-divider" style="margin: 10px auto 20px auto;">
+    <hr>
+    <span>🛠️ Ferramentas</span>
+    <hr>
+</div>
+
+<div class="content">
+    <center>
         <!-- Cronômetro -->
         <div class="container">
             <h2>Cronômetro ⏱️</h2>
@@ -592,6 +549,7 @@ center h1 {
             </div>
         </div>
 
+        <!-- Lembrete / Tarefas -->
         <div class="container">
             <h2>Lembrete 📝🧠</h2>
             <h5>Compras, Tarefas, Lembretes e etc.</h5>
@@ -602,6 +560,7 @@ center h1 {
             <div id="taskList" style="margin-top: 15px;"></div>
         </div>
 
+        <!-- Calculadora -->
         <div class="container">
             <h2>Calculadora 🔢</h2>
             <div class="calc">
@@ -628,6 +587,7 @@ center h1 {
             </div>
         </div>
 
+        <!-- Calendário -->
         <div class="container">
             <h2>Calendário 📅</h2>
             <div class="calendar">
@@ -641,7 +601,6 @@ center h1 {
                 </ul>
                 <ul class="days" id="calendarDays"></ul>
             </div>
-            
             <div id="calNoteArea">
                 <h4 style="margin-bottom: 10px;">Dia <span id="selectedDateLabel"></span></h4>
                 <div id="noteContent"></div>
@@ -651,8 +610,9 @@ center h1 {
                 </div>
             </div>
         </div>
-    </div>
-</center>
+    </center>
+</div>
+
 <script>
     // --- LÓGICA DO CRONÔMETRO ---
     let swInterval;
@@ -664,10 +624,7 @@ center h1 {
         if (!swRunning) {
             swRunning = true;
             btn.innerText = "Pausar";
-            swInterval = setInterval(() => {
-                swSeconds++;
-                updateStopwatchDisplay();
-            }, 1000);
+            swInterval = setInterval(() => { swSeconds++; updateStopwatchDisplay(); }, 1000);
         } else {
             swRunning = false;
             btn.innerText = "Continuar";
@@ -688,7 +645,7 @@ center h1 {
         const m = Math.floor((swSeconds % 3600) / 60);
         const s = swSeconds % 60;
         document.getElementById('stopwatchDisplay').innerText = 
-            `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
 
     // --- LÓGICA DO TIMER ---
@@ -705,9 +662,7 @@ center h1 {
                 const s = parseInt(document.getElementById('timerS').value) || 0;
                 tmSeconds = (h * 3600) + (m * 60) + s;
             }
-            
             if (tmSeconds <= 0) return alert("Defina um tempo primeiro!");
-
             tmRunning = true;
             btn.innerText = "Pausar";
             tmInterval = setInterval(() => {
@@ -741,42 +696,7 @@ center h1 {
         const m = Math.floor((tmSeconds % 3600) / 60);
         const s = tmSeconds % 60;
         document.getElementById('timerDisplay').innerText = 
-            `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    }
-
-    // --- LÓGICA DA IA E CHAVE ---
-    function saveApiKey() {
-        const key = document.getElementById('apiKeyInput').value.trim();
-        if (!key) return alert("Por favor, insira a chave!");
-        localStorage.setItem('gemini_api_key', key);
-        document.getElementById('keyStatus').innerText = "✅ Chave salva e pronta para uso!";
-        document.getElementById('apiKeyInput').value = "";
-    }
-
-    async function askAI() {
-        const savedKey = localStorage.getItem('gemini_api_key');
-        if (!savedKey) return alert("Vá em 'Configurar Gemini IA' e salve sua chave primeiro!");
-        const input = document.getElementById('iaInput');
-        const responseDiv = document.getElementById('iaResponse');
-        const btn = document.getElementById('btnIA');
-        if (!input.value.trim()) return;
-        btn.innerText = "Pensando...";
-        btn.disabled = true;
-        responseDiv.style.display = "block";
-        responseDiv.innerText = "Consultando os servidores do Google...";
-        try {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${savedKey}`;
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contents: [{ parts: [{ text: input.value }] }] })
-            });
-            const data = await response.json();
-            if (data.error) { responseDiv.innerText = "Erro na API: " + data.error.message; return; }
-            if (data.candidates && data.candidates[0].content) { responseDiv.innerText = data.candidates[0].content.parts[0].text; } 
-            else { responseDiv.innerText = "O Gemini não conseguiu processar esta resposta."; }
-        } catch (e) { responseDiv.innerText = "Erro de rede. Verifique sua conexão."; } 
-        finally { btn.innerText = "Perguntar à IA"; btn.disabled = false; }
+            `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
 
     // --- LÓGICA DE TAREFAS ---
@@ -820,7 +740,7 @@ center h1 {
     function appendToDisplay(v) { document.getElementById('display').value += v; }
     function clearDisplay() { document.getElementById('display').value = ""; }
     function calculate() {
-        try { document.getElementById('display').value = eval(document.getElementById('display').value); } 
+        try { document.getElementById('display').value = eval(document.getElementById('display').value); }
         catch { document.getElementById('display').value = "Erro"; }
     }
 
@@ -833,7 +753,7 @@ center h1 {
         const monthLabel = document.getElementById('monthDisplay');
         const m = navDate.getMonth();
         const y = navDate.getFullYear();
-        const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        const months = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
         monthLabel.innerText = `${months[m]} ${y}`;
         const firstDay = new Date(y, m, 1).getDay();
         const lastDay = new Date(y, m + 1, 0).getDate();
@@ -853,7 +773,7 @@ center h1 {
 
     function showDayDetails(d, m, y, key) {
         selectedDayKey = key;
-        const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        const months = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
         document.getElementById('calNoteArea').style.display = 'block';
         document.getElementById('selectedDateLabel').innerText = `${d} de ${months[m]}`;
         const notes = JSON.parse(localStorage.getItem('cal_notes_v2')) || {};
@@ -894,34 +814,30 @@ center h1 {
 
     loadTasks();
     renderCalendar();
-//usar o enter do teclado
-document.getElementById('taskInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        addTask();
-    }
-});
 
+    document.getElementById('taskInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') addTask();
+    });
 </script>
-</div>
-    
-<marquee><h5><span style="color: #black">V: 2.5 + Inteligência Artificial Integrada</span></h5></marquee>
 
+<!-- Rodapé -->
+<marquee><h4><span>V: 3.0 + Inteligência Artificial Integrada</span></h4></marquee>
+<!-- Privacidade -->
 <center>
 <div class="container" style="max-width: 450px; margin-top: 20px; font-size: 13px; color: #a0a0a0; border-top: 2px solid #bb86fc;">
     <h3 style="color: #bb86fc; text-align: center; margin-bottom: 15px;">Privacidade & Transparência 🛡️</h3>
-
     <p>O <strong>RoxoUP</strong> é uma ferramenta focada em produtividade e privacidade. Abaixo, detalhamos como lidamos com seus dados:</p>
-    
     <ul style="margin: 15px 0; padding-left: 20px; list-style-type: square;">
         <li><strong>Armazenamento Local:</strong> Todas as suas tarefas, notas de calendário e configurações são salvas localmente no seu navegador (localStorage). Não enviamos esses dados para servidores externos.</li>
         <li><strong>Segurança da API Key:</strong> Sua chave do Google Gemini fica armazenada apenas no seu dispositivo. Ela é utilizada exclusivamente para realizar as requisições de IA diretamente aos servidores do Google.</li>
-        <li><strong>Processamento de Dados:</strong> Ao interagir com a IA, o texto da sua pergunta é enviado ao Gooale Gemini para gerar a resposta. <li><strong>Cookies:</strong> Este site não utiliza cookies de rastreamento de terceiros</li>
+        <li><strong>Processamento de Dados:</strong> Ao interagir com a IA, o texto da sua pergunta é enviado ao Google Gemini para gerar a resposta.</li>
+        <li><strong>Cookies:</strong> Este site não utiliza cookies de rastreamento de terceiros.</li>
     </ul>
-
     <p style="text-align: center; font-style: italic;">"Sua produtividade é sua, seus dados também."</p>
-    </center>
 </div>
-</body>
+</center>
+
+<!-- Footer -->
 <footer>
     <div style="margin-bottom: 15px;">
         <a href="https://www.instagram.com/lukamarks?igsh=dHRpYnplcmFueHVi" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
@@ -931,4 +847,5 @@ document.getElementById('taskInput').addEventListener('keypress', function (e) {
     <h6>Desenvolvido por <strong>Lucas Marques</strong> &copy; 2026</h6>
 </footer>
 
+</body>
 </html>
