@@ -219,9 +219,106 @@
         from { text-shadow: 0 0 10px rgba(187, 134, 252, 0.4); }
         to { text-shadow: 0 0 25px rgba(187, 134, 252, 0.8); }
     }
+
+    /* --- POPUP ESTILO GLASS (PEQUENO NO TOPO) --- */
+    .glass-popup {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px 8px 8px;
+        border-radius: 50px;
+        background: rgba(30, 15, 45, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        animation: dropDown 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .glass-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #a124db;
+    }
+
+    .glass-info {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+    }
+
+    .glass-title {
+        color: #ffcc00;
+        font-size: 13px;
+        font-weight: bold;
+        font-family: sans-serif;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+
+    .glass-desc {
+        color: #e0e0e0;
+        font-size: 11px;
+        font-family: sans-serif;
+        margin: 0;
+    }
+
+    .glass-btn-play {
+        background: linear-gradient(45deg, #6a0dad, #a124db);
+        color: white;
+        border: none;
+        padding: 6px 14px;
+        font-size: 11px;
+        font-weight: bold;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .glass-btn-play:hover {
+        transform: scale(1.05);
+    }
+
+    .glass-btn-close {
+        background: transparent;
+        color: #aaa;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0 4px;
+    }
+
+    .glass-btn-close:hover {
+        color: #fff;
+    }
+
+    @keyframes dropDown {
+        from { top: -50px; opacity: 0; }
+        to { top: 20px; opacity: 1; }
+    }
+
 </style>
 </head>
 <body>
+<div id="game-glass-popup" class="glass-popup">
+    <img src="./202714.jpg" alt="Capa" class="glass-img" onerror="this.src='https://via.placeholder.com/40/6a0dad/ffffff?text=GTA'">
+    
+    <div class="glass-info">
+        <span class="glass-title">Atividade, Morador!</span>
+        <span class="glass-desc">Faça uma pausa e jogue.</span>
+    </div>
+
+    <button class="glass-btn-play" onclick="irParaOJogo()">JOGAR</button>
+    <button class="glass-btn-close" onclick="fecharAnuncio()">×</button>
+</div>
+
 
 <!-- Registro do Service Worker -->
 <script>
@@ -842,10 +939,30 @@
     document.getElementById('taskInput').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') addTask();
     });
+    // ... Código que já está aí em cima (final do seu sistema de tarefas)
+    document.getElementById('taskInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') addTask();
+    });
+    // ... Código que já está aí em cima (final do seu sistema de tarefas)
+    document.getElementById('taskInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') addTask();
+    });
+    function fecharAnuncio() {
+        const popup = document.getElementById('game-glass-popup');
+        if (popup) {
+            popup.style.display = 'none';
+        }
+    }
+
+    function irParaOJogo() {
+        window.location.href = './pavuna.html'; 
+    }
 </script>
+
 
 <!-- Rodapé -->
 <marquee><h4><span>Versão: 3.0</span></h4></marquee>
+<div>
 <!-- Privacidade -->
 <center>
 <div class="container" style="max-width: 450px; margin-top: 20px; font-size: 13px; color: #a0a0a0; border-top: 2px solid #bb86fc;">
