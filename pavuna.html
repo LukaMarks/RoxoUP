@@ -43,6 +43,41 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
 #aimBase { width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,50,50,0.15) 100%); border: 3px solid rgba(255,80,80,0.5); position: absolute; bottom: 0; right: 0; box-shadow: 0 0 15px rgba(255,80,80,0.2); }
 #aimKnob { width: 56px; height: 56px; border-radius: 50%; background: radial-gradient(circle, #ffaa66 0%, #ff3300 50%, #aa1100 100%); border: 3px solid #ff8844; position: absolute; box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 3px 5px rgba(0,0,0,0.3); pointer-events: none; display: flex; align-items: center; justify-content: center; font-size: 18px; line-height: 1; }
 #minimap { position: absolute; top: 40px; right: 8px; width: 90px; height: 90px; background: rgba(0,0,0,0.75); border: 1px solid #ff6600; z-index: 10; pointer-events: none; overflow: hidden; }
+#pauseBtn { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); border: 1px solid #ff6600; color: #ffcc00; font-size: 11px; font-weight: bold; font-family: 'Courier New', monospace; padding: 3px 10px; cursor: pointer; pointer-events: all; z-index: 20; letter-spacing: 1px; }
+#pauseScreen { position: absolute; top:0;left:0;right:0;bottom:0; background: rgba(0,0,0,0.75); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 200; color: #ffcc00; font-family: 'Courier New', monospace; }
+#pauseScreen h2 { font-size: 32px; letter-spacing: 6px; text-shadow: 2px 2px 0 #ff6600; margin-bottom: 20px; }
+#resumeBtn { background: #ff6600; color: #000; border: none; padding: 12px 32px; font-size: 14px; font-weight: 900; letter-spacing: 3px; cursor: pointer; font-family: 'Courier New', monospace; box-shadow: 3px 3px 0 #ffcc00; margin-top: 10px; }
+
+/* DIFFICULTY SCREEN */
+#difficultyScreen { position: absolute; top:0;left:0;right:0;bottom:0; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 110; color: #fff; font-family: 'Courier New', monospace; }
+#difficultyScreen h2 { font-size: 26px; font-weight: 900; color: #ff6600; letter-spacing: 5px; text-shadow: 2px 2px 0 #ffcc00; margin-bottom: 8px; }
+#difficultyScreen p { font-size: 11px; color: #888; letter-spacing: 2px; margin-bottom: 36px; }
+.diff-btn { display: flex; flex-direction: column; align-items: center; width: 240px; border: none; padding: 14px 20px; margin: 8px; cursor: pointer; font-family: 'Courier New', monospace; font-weight: 900; letter-spacing: 2px; transition: transform 0.1s; }
+.diff-btn:active { transform: translate(2px,2px); }
+.diff-btn .diff-name { font-size: 17px; }
+.diff-btn .diff-desc { font-size: 9px; margin-top: 5px; font-weight: normal; letter-spacing: 1px; opacity: 0.85; }
+#btnFacil { background: #226622; color: #aaffaa; box-shadow: 3px 3px 0 #00aa44; }
+#btnNormal { background: #ff6600; color: #000; box-shadow: 3px 3px 0 #ffcc00; }
+#btnDificil { background: #880000; color: #ffaaaa; box-shadow: 3px 3px 0 #ff2200; }
+#backToTitleBtn { margin-top: 20px; background: transparent; border: 1px solid #555; color: #888; padding: 8px 20px; font-size: 11px; font-family: 'Courier New', monospace; cursor: pointer; letter-spacing: 2px; }
+#diffBadge { font-size: 9px; color: #ffcc00; letter-spacing: 2px; margin-bottom: 28px; background: rgba(255,102,0,0.15); border: 1px solid #ff6600; padding: 4px 14px; }
+
+/* GAME OVER SCREEN */
+#gameOverScreen { position: absolute; top:0;left:0;right:0;bottom:0; background: rgba(0,0,0,0.92); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 300; font-family: 'Courier New', monospace; }
+#gameOverScreen .go-title { font-size: 44px; font-weight: 900; color: #ff2200; letter-spacing: 6px; text-shadow: 3px 3px 0 #880000, -1px -1px 0 #ff6600; margin-bottom: 8px; animation: goFlash 0.8s infinite alternate; }
+@keyframes goFlash { from { opacity:1; } to { opacity:0.6; } }
+#gameOverScreen .go-sub { font-size: 13px; color: #ffcc00; letter-spacing: 4px; margin-bottom: 6px; }
+#gameOverScreen .go-score { font-size: 18px; color: #fff; letter-spacing: 3px; margin-bottom: 4px; }
+#gameOverScreen .go-diff { font-size: 10px; color: #888; letter-spacing: 3px; margin-bottom: 36px; }
+.go-btn { width: 230px; border: none; padding: 14px 20px; margin: 8px; cursor: pointer; font-family: 'Courier New', monospace; font-weight: 900; font-size: 14px; letter-spacing: 3px; transition: transform 0.1s; }
+.go-btn:active { transform: translate(2px,2px); }
+#goRetryBtn { background: #ff6600; color: #000; box-shadow: 3px 3px 0 #ffcc00; }
+#goMenuBtn { background: transparent; color: #ffcc00; border: 2px solid #ff6600; box-shadow: 2px 2px 0 #ff6600; }
+#weaponUpgradeHud { position: absolute; bottom: 195px; left: 50%; transform: translateX(-50%); pointer-events: none; z-index: 15; display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.6); border: 1px solid #ff6600; padding: 3px 8px; }
+.wlvl { width: 12px; height: 12px; border-radius: 2px; border: 1px solid #ff6600; }
+.wlvl.active { background: #ffcc00; }
+.wlvl.inactive { background: #333; }
+#weaponIcon { font-size: 14px; margin-right: 4px; }
 #minimapCanvas { width: 90px; height: 90px; image-rendering: pixelated; }
 #wantedStars { display: flex; gap: 2px; }
 .star { font-size: 10px; }
@@ -92,13 +127,14 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
         <div id="titleSub">Atividade, Morador!</div>
         <p>by @lukamarks</p>
         <div id="titleCity">Sobreviva um dia comum no Rio de Janeiro.</div>
-        <p>BETA V.1</p>
-        <button id="startBtn" onclick="startGame()"> JOGAR</button>
+        <p>BETA V:2.0</p>
+        <button id="startBtn" onclick="showDifficultyScreen()"> JOGAR</button>
         <div style="margin-top: 18px;color:#555;font-size: 9px; letter-spacing:2px;">GIRE O CELULAR NA HORIZONTAL</div>
     </div>
     <div id="ui">
         <div id="hud">
             <div class="hud-box" id="scoreBox">PONTOS: <span id="scoreVal">0</span></div>
+            <button id="pauseBtn" onclick="togglePause()">⏸ PAUSA</button>
             <div class="hud-box" id="wantedBox">
                 <div id="wantedStars">
                     <span class="star off">★</span>
@@ -111,6 +147,48 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
         </div>
     </div>
     <div id="minimap"><canvas id="minimapCanvas" width="90" height="90"></canvas></div>
+    <div id="pauseScreen">
+        <h2>⏸ PAUSADO</h2>
+        <button id="resumeBtn" onclick="resumeGame()">▶ CONTINUAR</button>
+    </div>
+
+    <!-- DIFFICULTY SCREEN -->
+    <div id="difficultyScreen">
+        <div id="diffBadge">▼ ESCOLHA A DIFICULDADE ▼</div>
+        <h2>COMO VOCÊ AGUENTA?</h2>
+        <p>Defina o nível de ameaça dos policiais</p>
+        <button class="diff-btn" id="btnFacil" onclick="chooseDifficulty('facil')">
+            <span class="diff-name">😎 FÁCIL</span>
+            <span class="diff-desc">Policiais atiram devagar • Dano baixo (3 HP) • Ciclo: 60 frames</span>
+        </button>
+        <button class="diff-btn" id="btnNormal" onclick="chooseDifficulty('normal')">
+            <span class="diff-name">🔫 NORMAL</span>
+            <span class="diff-desc">Padrão do jogo • Dano médio (8 HP) • Ciclo: 40 frames</span>
+        </button>
+        <button class="diff-btn" id="btnDificil" onclick="chooseDifficulty('dificil')">
+            <span class="diff-name">💀 DIFÍCIL</span>
+            <span class="diff-desc">Policiais agressivos • Dano alto (18 HP) • Ciclo: 20 frames</span>
+        </button>
+        <button id="backToTitleBtn" onclick="backToTitle()">← VOLTAR</button>
+    </div>
+
+    <!-- GAME OVER SCREEN -->
+    <div id="gameOverScreen">
+        <div class="go-title">GAME OVER</div>
+        <div class="go-sub">VOCÊ FOI ABATIDO, MORADOR!</div>
+        <div class="go-score">PONTUAÇÃO: <span id="goScore">0</span></div>
+        <div class="go-diff">DIFICULDADE: <span id="goDiff">NORMAL</span></div>
+        <button class="go-btn" id="goRetryBtn" onclick="retryGame()">🔄 JOGAR NOVAMENTE</button>
+        <button class="go-btn" id="goMenuBtn" onclick="goToMenu()">🏠 MENU PRINCIPAL</button>
+    </div>
+    <div id="weaponUpgradeHud">
+        <span id="weaponIcon">🔫</span>
+        <div class="wlvl active" id="wlvl1"></div>
+        <div class="wlvl inactive" id="wlvl2"></div>
+        <div class="wlvl inactive" id="wlvl3"></div>
+        <div class="wlvl inactive" id="wlvl4"></div>
+        <div class="wlvl inactive" id="wlvl5"></div>
+    </div>
     <div id="controls">
         <div id="joystickArea" class="ctrl-zone">
             <div id="joystickBase">
@@ -163,7 +241,17 @@ const G = {
     joystick: { active: false, startX:0, startY:0, dx:0, dy:0, id:-1},
     aimJoystick: { active: false, dx:0, dy:0, id:-1, angle:0},
     frame: 0, spawnTimer: 0,
-    trafficNodes: [], landmarkProps: []
+    trafficNodes: [], landmarkProps: [],
+    pickups: [], pickupSpawnTimer: 0,
+    weaponLevel: 1,
+    paused: false,
+    vehicleHitCooldown: 0,
+    difficulty: 'normal', // 'facil', 'normal', 'dificil'
+    difficultyConfig: {
+        facil:   { shootCooldown: 60, bulletDmg: [0,2,3,4,5,6],   label: 'FÁCIL' },
+        normal:  { shootCooldown: 40, bulletDmg: [0,3,5,8,12,20],  label: 'NORMAL' },
+        dificil: { shootCooldown: 20, bulletDmg: [0,6,10,16,22,30], label: 'DIFÍCIL' }
+    }
 };
 
 // MAP GENERATION
@@ -397,6 +485,14 @@ function spawnNPCs() {
         const fx = (22 + Math.random()*40)*TILE;
         const fy = (12 + Math.random()*50)*TILE;
         G.npcs.push(createNPC(fx, fy, 2000+i));
+    }
+    // Police patrols espalhados pelo mapa
+    for (let i=0;i<10;i++) {
+        const px = (50 + Math.random()*220)*TILE;
+        const py = (30 + Math.random()*150)*TILE;
+        const cop = createNPC(px, py, 3000+i);
+        cop.isPolice = true; cop.hp = 5; cop.shootCooldown = 55; cop.shootTimer = Math.floor(Math.random()*55);
+        G.npcs.push(cop);
     }
 }
 
@@ -688,7 +784,9 @@ function updatePlayer(dt) {
     if (p.shootTimer>0) p.shootTimer--;
     if (G.input.shoot&&p.shootTimer<=0&&!p.inVehicle) {
         const shootAngle = G.aimJoystick.active ? G.aimJoystick.angle : p.angle;
-        shoot(p.x,p.y,shootAngle,true,false); p.shooting=true;p.shootTimer=8;
+        shoot(p.x,p.y,shootAngle,true,false); p.shooting=true;
+        const shootCooldowns = [8,7,6,5,5];
+        p.shootTimer = shootCooldowns[G.weaponLevel-1]||8;
     } else if (!G.input.shoot) p.shooting=false;
     if (p.enterCooldown>0) p.enterCooldown--;
     G.camera.x=Math.max(0,Math.min(WORLD_W*TILE-G.W,p.x-G.W/2));
@@ -716,7 +814,11 @@ function updateNPCs() {
                 const spd=1.2+(G.wanted*0.2), nx2=n.x+Math.cos(ang)*spd, ny2=n.y+Math.sin(ang)*spd;
                 if (!isSolid(nx2,n.y)) n.x=nx2; if (!isSolid(n.x,ny2)) n.y=ny2;
                 n.running=true; n.shootTimer--;
-                if (n.shootTimer<=0&&dp<220) { shoot(n.x,n.y,ang-Math.PI/2,false,true); n.shootTimer=n.shootCooldown; }
+                if (n.shootTimer<=0&&dp<220) {
+                    // Atirar direto na direção do jogador
+                    const shootAng = Math.atan2(G.player.x-n.x, -(G.player.y-n.y));
+                    shoot(n.x,n.y,shootAng,false,true); n.shootTimer=G.difficultyConfig[G.difficulty].shootCooldown;
+                }
             }
         } else {
             if (G.wanted>0&&dp<250) { n.panic=true; n.panicTimer=Math.max(n.panicTimer,120); }
@@ -748,7 +850,7 @@ function updateVehicles() {
             const nx=v.x+Math.sin(v.angle)*v.speed*TILE*0.12, ny=v.y-Math.cos(v.angle)*v.speed*TILE*0.12;
             if (!isSolid(nx,ny)) { v.x=nx;v.y=ny; } else { v.speed*=0.3; v.angle+=Math.PI*0.3+Math.random()*0.5; }
             hitNPCWithVehicle(v);
-            if (dist(v.x,v.y,p.x,p.y)<30&&!p.inVehicle) { p.hp-=15; if(p.hp<=0)playerDie(); v.speed*=0.4; }
+            if (dist(v.x,v.y,p.x,p.y)<30&&!p.inVehicle) { hitNPCWithVehicle(v); v.speed*=0.4; }
             continue;
         }
         if (!v.trafficTarget) {
@@ -804,9 +906,32 @@ function updatePoliceSystem() {
 }
 
 function shoot(x,y,angle,isPlayer,isPolice) {
-    const bAngle=angle+(Math.random()-0.5)*0.1;
-    G.bullets.push({ x,y, vx:Math.sin(bAngle)*12, vy:-Math.cos(bAngle)*12, isPlayer,isPolice,life:50 });
+    const spd = isPlayer ? (10 + G.weaponLevel*1.5) : 12;
+    const dmgMult = isPlayer ? G.weaponLevel : 1;
+    function fireBullet(ang, speedOverride) {
+        const bAngle=ang+(Math.random()-0.5)*0.06;
+        const s = speedOverride || spd;
+        G.bullets.push({ x,y, vx:Math.sin(bAngle)*s, vy:-Math.cos(bAngle)*s, isPlayer,isPolice,life:55, dmg: dmgMult });
+    }
     G.explosions.push({x:x+Math.sin(angle)*20,y:y-Math.cos(angle)*20,timer:5,maxTimer:5,size:12});
+    if (!isPlayer) { fireBullet(angle); return; }
+    const lvl = G.weaponLevel;
+    if (lvl===1) { fireBullet(angle); }
+    else if (lvl===2) { fireBullet(angle); }
+    else if (lvl===3) { fireBullet(angle); }
+    else if (lvl===4) {
+        // 4 tiros: frente + 2 diagonais
+        fireBullet(angle);
+        fireBullet(angle - Math.PI/6);
+        fireBullet(angle + Math.PI/6);
+        fireBullet(angle + Math.PI);
+    } else if (lvl===5) {
+        // 4 rajadas: 2 frente, 2 diagonais
+        fireBullet(angle, spd);
+        fireBullet(angle, spd*0.85);
+        fireBullet(angle - Math.PI/5, spd);
+        fireBullet(angle + Math.PI/5, spd);
+    }
 }
 
 function updateBullets() {
@@ -819,7 +944,7 @@ function updateBullets() {
             for (const n of G.npcs) {
                 if (n.dead||n.inVehicle) continue;
                 if (dist(b.x,b.y,n.x,n.y)<12) {
-                    n.hp--; spawnBlood(n.x,n.y);
+                    n.hp -= (b.dmg||1); spawnBlood(n.x,n.y);
                     if (n.hp<=0) killNPC(n,'baleado'); else {n.panic=true;n.panicTimer=120;}
                     hit=true; break;
                 }
@@ -836,7 +961,8 @@ function updateBullets() {
             if (hit){G.bullets.splice(i,1);}
         } else if (b.isPolice) {
             if (dist(b.x,b.y,G.player.x,G.player.y)<15) {
-                G.player.hp-=[0,3,5,8,12,20][G.wanted]||5;
+                const dmgTable = G.difficultyConfig[G.difficulty].bulletDmg;
+                G.player.hp -= dmgTable[G.wanted] || dmgTable[1];
                 if (G.player.hp<=0) playerDie();
                 G.bullets.splice(i,1);
             }
@@ -849,7 +975,14 @@ function hitNPCWithVehicle(v) {
         if (n.dead||n.inVehicle) continue;
         if (dist(n.x,n.y,v.x,v.y)<22) { killNPC(n,'atropelado'); v.speed*=0.7; }
     }
-    if (v.isPolice&&!G.player.inVehicle&&dist(v.x,v.y,G.player.x,G.player.y)<28) { G.player.hp-=10; if (G.player.hp<=0) playerDie(); }
+    // Veículos tiram metade do HP do jogador (2 atropelamentos = morte), com cooldown
+    if (!G.player.inVehicle && dist(v.x,v.y,G.player.x,G.player.y)<28 && G.vehicleHitCooldown<=0) {
+        G.player.hp = Math.max(0, G.player.hp - G.player.maxHp/2);
+        G.vehicleHitCooldown = 90; // ~1.5s de invencibilidade
+        spawnBlood(G.player.x, G.player.y, 3);
+        G.explosions.push({x:G.player.x,y:G.player.y,timer:8,maxTimer:8,size:20});
+        if (G.player.hp<=0) playerDie();
+    }
 }
 
 function killNPC(n,method) {
@@ -873,11 +1006,11 @@ function destroyVehicle(v) {
 }
 
 function playerDie() {
-    setTimeout(()=>{
-        G.player.hp=100; G.player.x=1200+Math.random()*200; G.player.y=1400+Math.random()*200;
-        G.wanted=Math.max(0,G.wanted-2); updateWantedUI();
-        if (G.wanted===0) { clearPoliceUnits(); }
-    },2000);
+    G.player.dead = true;
+    G.running = false;
+    setTimeout(() => {
+        showGameOver();
+    }, 1200);
 }
 
 function exitVehicle(p) {
@@ -889,6 +1022,104 @@ function exitVehicle(p) {
 function spawnBlood(x,y,count=3) { for (let i=0;i<count;i++) G.blood.push({x:x+(Math.random()-0.5)*20,y:y+(Math.random()-0.5)*20,size:3+Math.random()*5,alpha:0.8+Math.random()*0.2}); }
 function updateExplosions() { for (let i=G.explosions.length-1;i>=0;i--) { G.explosions[i].timer--; if (G.explosions[i].timer<=0) G.explosions.splice(i,1); } }
 function dist(ax,ay,bx,by){return Math.sqrt((ax-bx)**2+(ay-by)**2);}
+
+function spawnPickup(type) {
+    const roads = [18,30,44,58,72,88,104,118,132,148,162,176,190];
+    const vroads = [22,38,55,72,90,108,126,144,162,180,198,216,234,252,270,288];
+    const ry = roads[Math.floor(Math.random()*roads.length)];
+    const rx = vroads[Math.floor(Math.random()*vroads.length)];
+    // Coloca na calçada, não na rua
+    const offX = (Math.random()<0.5?-1:1) * (8 + Math.floor(Math.random()*6));
+    const offY = (Math.random()<0.5?-1:1) * (8 + Math.floor(Math.random()*6));
+    G.pickups.push({ type, x:(rx+offX)*TILE, y:(ry+offY)*TILE, id: G.frame+Math.random() });
+}
+
+function updatePickups() {
+    // Spawn balanceado: hamburguer a cada ~8s, arma a cada ~20s
+    G.pickupSpawnTimer++;
+    const burgerCount = G.pickups.filter(p=>p.type==='burger').length;
+    const weaponCount = G.pickups.filter(p=>p.type==='weapon').length;
+    if (G.pickupSpawnTimer % 480 === 0 && burgerCount < 5) spawnPickup('burger');
+    if (G.pickupSpawnTimer % 1200 === 0 && weaponCount < 3) spawnPickup('weapon');
+    // Spawn inicial
+    if (G.pickups.length===0 && G.pickupSpawnTimer < 10) {
+        for(let i=0;i<3;i++) spawnPickup('burger');
+        for(let i=0;i<2;i++) spawnPickup('weapon');
+    }
+    // Coleta
+    const p = G.player;
+    if (p.dead||p.inVehicle) return;
+    for (let i=G.pickups.length-1;i>=0;i--) {
+        const pk = G.pickups[i];
+        if (dist(p.x,p.y,pk.x,pk.y)<20) {
+            if (pk.type==='burger') {
+                p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.3);
+                G.explosions.push({x:pk.x,y:pk.y,timer:10,maxTimer:10,size:18});
+            } else if (pk.type==='weapon') {
+                if (G.weaponLevel < 5) {
+                    G.weaponLevel++;
+                    updateWeaponUI();
+                }
+                G.explosions.push({x:pk.x,y:pk.y,timer:10,maxTimer:10,size:18});
+            }
+            G.pickups.splice(i,1);
+        }
+    }
+}
+
+function drawPickups(ctx, camX, camY) {
+    for (const pk of G.pickups) {
+        const sx=pk.x-camX, sy=pk.y-camY;
+        if (sx<-30||sx>G.W+30||sy<-30||sy>G.H+30) continue;
+        const bob = Math.sin(G.frame*0.08)*3;
+        ctx.save(); ctx.translate(sx, sy+bob);
+        if (pk.type==='burger') {
+            // Bun top
+            ctx.fillStyle='#c8760a'; ctx.beginPath(); ctx.ellipse(0,-9,9,5,0,0,Math.PI*2); ctx.fill();
+            ctx.fillStyle='#e8a020'; ctx.beginPath(); ctx.ellipse(0,-10,8,3,0,0,Math.PI*2); ctx.fill();
+            // Sesame seeds
+            ctx.fillStyle='#fff'; ctx.fillRect(-3,-12,2,1); ctx.fillRect(2,-11,2,1);
+            // Patty
+            ctx.fillStyle='#6b2800'; ctx.fillRect(-9,-5,18,5);
+            // Lettuce
+            ctx.fillStyle='#3aaa3a'; ctx.fillRect(-9,-1,18,3);
+            // Bun bottom
+            ctx.fillStyle='#c8760a'; ctx.fillRect(-9,2,18,5);
+            // Glow
+            ctx.fillStyle='rgba(255,200,0,0.2)'; ctx.beginPath(); ctx.arc(0,0,14,0,Math.PI*2); ctx.fill();
+        } else {
+            // Weapon icon
+            ctx.fillStyle='rgba(255,200,0,0.25)'; ctx.beginPath(); ctx.arc(0,0,14,0,Math.PI*2); ctx.fill();
+            ctx.fillStyle='#888'; ctx.fillRect(-10,-3,16,6);
+            ctx.fillStyle='#aaa'; ctx.fillRect(6,-5,4,4);
+            ctx.fillStyle='#555'; ctx.fillRect(-10,3,6,4);
+            ctx.fillStyle='#ffcc00'; ctx.font='bold 8px Courier New'; ctx.textAlign='center';
+            ctx.fillText('LVL'+(Math.min(G.weaponLevel+1,5)),0,12);
+        }
+        ctx.restore();
+    }
+}
+
+function updateWeaponUI() {
+    const icons = ['🔫','🔫','💥','🔥','⚡'];
+    document.getElementById('weaponIcon').textContent = icons[G.weaponLevel-1];
+    for(let i=1;i<=5;i++) {
+        const el = document.getElementById('wlvl'+i);
+        if(el) el.className='wlvl '+(i<=G.weaponLevel?'active':'inactive');
+    }
+}
+
+function togglePause() {
+    G.paused = !G.paused;
+    document.getElementById('pauseScreen').style.display = G.paused ? 'flex' : 'none';
+    document.getElementById('pauseBtn').textContent = G.paused ? '▶ JOGO' : '⏸ PAUSA';
+    if (!G.paused) {
+        G.lastTime = performance.now();
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+function resumeGame() { if(G.paused) togglePause(); }
 
 function respawnLogic() {
     G.spawnTimer++; if (G.spawnTimer<200) return; G.spawnTimer=0;
@@ -912,6 +1143,7 @@ function render() {
     for (const b of G.buildings) drawBuilding(ctx,b,camX,camY);
     for (const v of G.vehicles) drawVehicle(ctx,v,camX,camY);
     for (const n of G.npcs) drawNPC(ctx,n,camX,camY);
+    drawPickups(ctx,camX,camY);
     drawPlayer(ctx,G.player,camX,camY);
     for (const b of G.bullets) drawBullet(ctx,b,camX,camY);
     for (const e of G.explosions) drawExplosion(ctx,e,camX,camY);
@@ -934,6 +1166,8 @@ function updateScoreUI(){document.getElementById('scoreVal').textContent=G.score
 function updateWantedUI() { document.querySelectorAll('#wantedStars .star').forEach((s,i)=>s.className='star '+(i<G.wanted?'on':'off')); }
 
 function setupControls() {
+    if (G._controlsSetup) return;
+    G._controlsSetup = true;
     const joyBase=document.getElementById('joystickBase'); const joyKnob=document.getElementById('joystickKnob');
     const aimBase=document.getElementById('aimBase'); const aimKnob=document.getElementById('aimKnob');
     const maxR=42;
@@ -972,7 +1206,7 @@ function setupControls() {
         }
     });
     const keys={};
-    document.addEventListener('keydown',e=>{keys[e.code]=true;updateKeyInput(keys);});
+    document.addEventListener('keydown',e=>{keys[e.code]=true;updateKeyInput(keys); if(e.code==='Escape')togglePause();});
     document.addEventListener('keyup',e=>{keys[e.code]=false;updateKeyInput(keys);});
     function updateKeyInput(k){
         G.input.dx=(k['KeyD']||k['ArrowRight']?1:0)-(k['KeyA']||k['ArrowLeft']?1:0);
@@ -1009,9 +1243,10 @@ function hornHonk() {
 }
 
 function gameLoop(ts) {
-    if (!G.running) return; G.frame++;
+    if (!G.running || G.paused) return; G.frame++;
     const dt=(ts-G.lastTime)/16.67; G.lastTime=ts;
-    updatePlayer(dt); updateNPCs(); updateVehicles(); updateBullets(); updateExplosions(); updatePoliceSystem(); respawnLogic();
+    if (G.vehicleHitCooldown>0) G.vehicleHitCooldown--;
+    updatePlayer(dt); updateNPCs(); updateVehicles(); updateBullets(); updateExplosions(); updatePoliceSystem(); updatePickups(); respawnLogic();
     render();
     if (G.frame%3===0) drawMinimap();
     requestAnimationFrame(gameLoop);
@@ -1039,10 +1274,57 @@ function initCanvas() {
     resize();window.addEventListener('resize',resize);
 }
 
+function showDifficultyScreen() {
+    document.getElementById('titleScreen').style.display = 'none';
+    document.getElementById('difficultyScreen').style.display = 'flex';
+}
+
+function backToTitle() {
+    document.getElementById('difficultyScreen').style.display = 'none';
+    document.getElementById('titleScreen').style.display = 'flex';
+}
+
+function chooseDifficulty(diff) {
+    G.difficulty = diff;
+    document.getElementById('difficultyScreen').style.display = 'none';
+    startGame();
+}
+
+function showGameOver() {
+    const diffLabel = G.difficultyConfig[G.difficulty].label;
+    document.getElementById('goScore').textContent = G.score.toLocaleString();
+    document.getElementById('goDiff').textContent = diffLabel;
+    document.getElementById('gameOverScreen').style.display = 'flex';
+}
+
+function retryGame() {
+    document.getElementById('gameOverScreen').style.display = 'none';
+    // Reset everything and start with same difficulty
+    G.bullets = []; G.explosions = []; G.blood = [];
+    G.npcs = []; G.vehicles = []; G.policeUnits = [];
+    G.score = 0; G.wanted = 0; G.wantedTimer = 0; G.wantedCooldown = 0;
+    G.policeSpawnTimer = 0; G.frame = 0; G.spawnTimer = 0;
+    updateScoreUI(); updateWantedUI();
+    startGame();
+}
+
+function goToMenu() {
+    document.getElementById('gameOverScreen').style.display = 'none';
+    G.running = false; G.paused = false;
+    G.bullets = []; G.explosions = []; G.blood = [];
+    G.npcs = []; G.vehicles = []; G.policeUnits = [];
+    G.score = 0; G.wanted = 0;
+    updateScoreUI(); updateWantedUI();
+    document.getElementById('titleScreen').style.display = 'flex';
+    // Redraw title art
+    drawTitleArt();
+}
+
 function startGame() {
     document.getElementById('titleScreen').style.display='none';
     G.player=createPlayer(); G.camera={x:G.player.x-G.W/2,y:G.player.y-G.H/2};
-    generateMap(); setupControls();
+    G.pickups=[]; G.pickupSpawnTimer=0; G.weaponLevel=1; G.vehicleHitCooldown=0; G.paused=false;
+    generateMap(); setupControls(); updateWeaponUI();
     G.running=true;G.lastTime=performance.now(); requestAnimationFrame(gameLoop);
 }
 
