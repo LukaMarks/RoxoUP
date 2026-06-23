@@ -148,7 +148,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
         <button id="resumeBtn" onclick="resumeGame()">▶ CONTINUAR</button>
     </div>
 
-    <!-- DIFFICULTY SCREEN -->
     <div id="difficultyScreen">
         <div id="diffBadge">▼ ESCOLHA A DIFICULDADE ▼</div>
         <h2>COMO VOCÊ AGUENTA?</h2>
@@ -168,7 +167,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
         <button id="backToTitleBtn" onclick="backToTitle()">← VOLTAR</button>
     </div>
 
-    <!-- GAME OVER SCREEN -->
     <div id="gameOverScreen">
         <div class="go-title">SE FODEU! HAHAHA</div>
         <div class="go-sub">Atividade, Morador!</div>
@@ -249,7 +247,7 @@ const G = {
         dificil: { shootCooldown: 20, bulletDmg: [0,6,10,16,22,30], label: 'DIFÍCIL' }
     },
     screenBloodAlpha: 0,
-    mouseAngle: 0
+    mouseAngle: undefined
 };
 
 // MAP GENERATION
@@ -712,10 +710,17 @@ function drawBullet(ctx,b,camX,camY) {
     ctx.fillStyle=b.isPolice?'rgba(0,100,255,0.4)':'rgba(255,150,0,0.5)'; ctx.beginPath(); ctx.arc(sx-b.vx,sy-b.vy,2,0,Math.PI*2); ctx.fill();
 }
 
+// EXPLOSÃO REFEITA PARA FICAR FRENÉTICA
 function drawExplosion(ctx,e,camX,camY) {
     const sx=e.x-camX,sy=e.y-camY, r=(e.maxTimer-e.timer)/e.maxTimer;
-    ctx.globalAlpha=r*0.6; ctx.fillStyle='#ff6600'; ctx.beginPath(); ctx.arc(sx,sy,e.size*(1-r*0.5),0,Math.PI*2); ctx.fill();
-    ctx.globalAlpha=r; ctx.fillStyle='#ffff00'; ctx.beginPath(); ctx.arc(sx,sy,e.size*(1-r*0.5)*0.5,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha=Math.max(0, 1-r); 
+    ctx.strokeStyle = `rgba(255, 150, 50, ${1-r})`;
+    ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(sx, sy, e.size * r * 1.2, 0, Math.PI*2); ctx.stroke();
+    
+    ctx.fillStyle='#ff3300'; ctx.beginPath(); ctx.arc(sx,sy,e.size*(1-r),0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#ffcc00'; ctx.beginPath(); ctx.arc(sx,sy,e.size*(1-r)*0.6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(sx,sy,e.size*(1-r)*0.3,0,Math.PI*2); ctx.fill();
     ctx.globalAlpha=1;
 }
 
@@ -775,8 +780,8 @@ function updatePlayer(dt) {
             const nx=p.x+dx*baseSpd*TILE*0.1, ny=p.y+dy*baseSpd*TILE*0.1;
             if (!isSolid(nx,p.y)) p.x=nx;
             if (!isSolid(p.x,ny)) p.y=ny;
-            if (!G.aimJoystick.active && G.mouseAngle === 0) {
-                p.angle=Math.atan2(dy,dx)-Math.PI/2;
+            if (!G.aimJoystick.active && G.mouseAngle === undefined) {
+                p.angle=Math.atan2(dy,dx);
             }
         } else { p.running=false; }
     }
@@ -814,7 +819,7 @@ function updateNPCs() {
                 if (!isSolid(nx2,n.y)) n.x=nx2; if (!isSolid(n.x,ny2)) n.y=ny2;
                 n.running=true; n.shootTimer--;
                 if (n.shootTimer<=0&&dp<220) {
-                    const shootAng = Math.atan2(G.player.x-n.x, -(G.player.y-n.y));
+                    const shootAng = Math.atan2(G.player.y-n.y, G.player.x-n.x);
                     shoot(n.x,n.y,shootAng,false,true); n.shootTimer=G.difficultyConfig[G.difficulty].shootCooldown;
                 }
             }
@@ -903,15 +908,16 @@ function updatePoliceSystem() {
     G.policeUnits = G.policeUnits.filter(pu=>!pu.ref.dead);
 }
 
+// LÓGICA DO TIRO TOTALMENTE CORRIGIDA E TURBINADA
 function shoot(x,y,angle,isPlayer,isPolice) {
     const spd = isPlayer ? (10 + G.weaponLevel*1.5) : 12;
     const dmgMult = isPlayer ? G.weaponLevel : 1;
     function fireBullet(ang, speedOverride) {
         const bAngle=ang+(Math.random()-0.5)*0.06;
         const s = speedOverride || spd;
-        G.bullets.push({ x,y, vx:Math.sin(bAngle)*s, vy:-Math.cos(bAngle)*s, isPlayer,isPolice,life:55, dmg: dmgMult });
+        G.bullets.push({ x,y, vx:Math.cos(bAngle)*s, vy:Math.sin(bAngle)*s, isPlayer,isPolice,life:55, dmg: dmgMult });
     }
-    G.explosions.push({x:x+Math.sin(angle)*20,y:y-Math.cos(angle)*20,timer:5,maxTimer:5,size:12});
+    G.explosions.push({x:x+Math.cos(angle)*20,y:y+Math.sin(angle)*20,timer:6,maxTimer:6,size:16});
     if (!isPlayer) { fireBullet(angle); return; }
     const lvl = G.weaponLevel;
     if (lvl===1) { fireBullet(angle); }
@@ -940,7 +946,7 @@ function updateBullets() {
             for (const n of G.npcs) {
                 if (n.dead||n.inVehicle) continue;
                 if (dist(b.x,b.y,n.x,n.y)<12) {
-                    n.hp -= (b.dmg||1); spawnBlood(n.x,n.y, 6);
+                    n.hp -= (b.dmg||1); spawnBlood(n.x,n.y, 15);
                     if (n.hp<=0) killNPC(n,'baleado'); else {n.panic=true;n.panicTimer=120;}
                     hit=true; break;
                 }
@@ -950,6 +956,7 @@ function updateBullets() {
                     if (v.dead) continue;
                     if (dist(b.x,b.y,v.x,v.y)<22) {
                         v.hp-=20;v.smoke=true; G.score+=5;updateScoreUI();
+                        G.explosions.push({x:b.x, y:b.y, timer:8, maxTimer:8, size:20}); // Faísca bala
                         if (v.hp<=0) destroyVehicle(v); hit=true; break;
                     }
                 }
@@ -960,7 +967,7 @@ function updateBullets() {
                 const dmgTable = G.difficultyConfig[G.difficulty].bulletDmg;
                 G.player.hp -= dmgTable[G.wanted] || dmgTable[1];
                 G.screenBloodAlpha = 0.55; 
-                spawnBlood(G.player.x, G.player.y, 10); 
+                spawnBlood(G.player.x, G.player.y, 15); 
                 if (G.player.hp<=0) playerDie();
                 G.bullets.splice(i,1);
             }
@@ -977,7 +984,7 @@ function hitNPCWithVehicle(v) {
         G.player.hp = Math.max(0, G.player.hp - G.player.maxHp/2);
         G.vehicleHitCooldown = 90; 
         G.screenBloodAlpha = 0.8; 
-        spawnBlood(G.player.x, G.player.y, 16); 
+        spawnBlood(G.player.x, G.player.y, 30); 
         G.explosions.push({x:G.player.x,y:G.player.y,timer:8,maxTimer:8,size:20});
         if (G.player.hp<=0) playerDie();
     }
@@ -986,7 +993,7 @@ function hitNPCWithVehicle(v) {
 function killNPC(n,method) {
     if (n.dead) return;
     n.hp=0;n.dying=true;n.dead=true;n.dyingTimer=60;
-    spawnBlood(n.x,n.y,8);
+    spawnBlood(n.x,n.y, 25);
     G.score+=n.isPolice?(method==='atropelado'?500:300):(method==='atropelado'?150:100);
     if (!n.isPolice) { G.wanted=Math.min(5,G.wanted+1); G.wantedTimer=600; G.wantedCooldown=0; updateWantedUI(); }
     else { G.score+=500; G.wanted=Math.min(5,G.wanted+1); G.wantedTimer=900; G.wantedCooldown=0; updateWantedUI(); }
@@ -996,7 +1003,20 @@ function killNPC(n,method) {
 function destroyVehicle(v) {
     if (v.dead) return;
     v.dead=true;
-    G.explosions.push({x:v.x,y:v.y,timer:40,maxTimer:40,size:v.type==='bus'?70:50});
+    G.explosions.push({x:v.x,y:v.y,timer:40,maxTimer:40,size:v.type==='bus'?100:80});
+    
+    // EXPLOSÕES EM CADEIA BEM ANIMAIS
+    for (let i = 1; i <= 3; i++) {
+        setTimeout(() => {
+            if(!G.running) return;
+            G.explosions.push({
+                x: v.x + (Math.random()-0.5)*50,
+                y: v.y + (Math.random()-0.5)*50,
+                timer: 30, maxTimer: 30, size: 40 + Math.random()*50
+            });
+        }, i * 150);
+    }
+
     G.score+=v.isPolice?500:(v.type==='bus'?300:200);
     G.wanted=Math.min(5,G.wanted+1); G.wantedCooldown=0; updateWantedUI();
     updateScoreUI();
@@ -1017,13 +1037,14 @@ function exitVehicle(p) {
     p.vehicleId=-1;p.enterCooldown=30;
 }
 
-function spawnBlood(x,y,count=6) { 
+// SANGUE MAIS GENEROSO E VIOLENTO
+function spawnBlood(x,y,count=15) { 
     for (let i=0;i<count;i++) {
         G.blood.push({
-            x:x+(Math.random()-0.5)*32,
-            y:y+(Math.random()-0.5)*32,
-            size:5+Math.random()*9,
-            alpha:0.8+Math.random()*0.2
+            x:x+(Math.random()-0.5)*35,
+            y:y+(Math.random()-0.5)*35,
+            size:4+Math.random()*8,
+            alpha:0.8+Math.random()*0.4
         }); 
     }
 }
@@ -1193,14 +1214,18 @@ function setupControls() {
         G.input.dx=dx/maxR;G.input.dy=dy/maxR; G.joystick.dx=dx/maxR;G.joystick.dy=dy/maxR;
     }
     function resetKnob(){joyKnob.style.left='42px';joyKnob.style.top='42px';G.input.dx=0;G.input.dy=0;}
+    
+    // MIRA CORRIGIDA
     function updateAimKnob(cx,cy) {
         const r=aimBase.getBoundingClientRect(); const bx=r.left+r.width/2,by=r.top+r.height/2;
         let dx=cx-bx,dy=cy-by; const d=Math.sqrt(dx*dx+dy*dy);
         if(d>maxR){dx=dx/d*maxR;dy=dy/d*maxR;}
         aimKnob.style.left=(r.width/2+dx-28)+'px'; aimKnob.style.top=(r.height/2+dy-28)+'px';
-        G.aimJoystick.dx=dx/maxR; G.aimJoystick.dy=dy/maxR; G.aimJoystick.angle=Math.atan2(dy,dx)-Math.PI/2;
+        G.aimJoystick.dx=dx/maxR; G.aimJoystick.dy=dy/maxR; 
+        G.aimJoystick.angle=Math.atan2(dy,dx); 
         const mag=Math.sqrt(dx*dx+dy*dy)/maxR; G.input.shoot=(mag>0.25);
     }
+    
     function resetAimKnob(){
         aimKnob.style.left='42px';aimKnob.style.top='42px';
         G.aimJoystick.active=false;G.input.shoot=false; G.aimJoystick.dx=0;G.aimJoystick.dy=0;
@@ -1229,7 +1254,7 @@ function setupControls() {
         const playerScreenY = G.player.y - G.camera.y;
         const dx = e.clientX - playerScreenX;
         const dy = e.clientY - playerScreenY;
-        G.mouseAngle = Math.atan2(dy, dx) - Math.PI / 2;
+        G.mouseAngle = Math.atan2(dy, dx); 
     });
 
     window.addEventListener('mousedown', e => {
