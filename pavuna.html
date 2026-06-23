@@ -83,41 +83,37 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
 .star { font-size: 10px; }
 .star.on { color: #ff3300; text-shadow: 0 0 4px #ff0000; }
 .star.off { color: #333; }
-    /* Estilo para Botão de Voltar Glass (Topo) */
-    .glass-btn-back {
-        position: fixed;
-        top: 20px;       /* Alterado de bottom para top */
-        left: 20px;
-        padding: 8px 16px;
-        background: rgba(30, 15, 45, 0.7);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: white;
-        border-radius: 20px;
-        font-size: 13px;
-        font-weight: bold;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: 0.3s;
-        z-index: 10000; /* Z-index alto para ficar sobre outros elementos, se necessário */
-    }
 
-    .glass-btn-back:hover {
-        background: rgba(161, 36, 219, 0.6);
-        transform: scale(1.05);
-    }
-
-
+.glass-btn-back {
+    position: fixed;
+    top: 20px;       
+    left: 20px;
+    padding: 8px 16px;
+    background: rgba(30, 15, 45, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+    z-index: 10000; 
+}
+.glass-btn-back:hover {
+    background: rgba(161, 36, 219, 0.6);
+    transform: scale(1.05);
+}
 </style>
 </head>
 <body>
   <a href="index.html" class="glass-btn-back">
     <span>←</span> Voltar
 </a>
-
 
 <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
@@ -127,7 +123,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
         <div id="titleSub">Atividade, Morador!</div>
         <p>by @lukamarks</p>
         <div id="titleCity">Sobreviva um dia comum no Rio de Janeiro.</div>
-        <p>BETA V:2.0</p>
+        <p>BETA V:2.5</p>
         <button id="startBtn" onclick="showDifficultyScreen()"> JOGAR</button>
         <div style="margin-top: 18px;color:#555;font-size: 9px; letter-spacing:2px;">GIRE O CELULAR NA HORIZONTAL</div>
     </div>
@@ -159,7 +155,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
         <p>Defina o nível de ameaça dos policiais</p>
         <button class="diff-btn" id="btnFacil" onclick="chooseDifficulty('facil')">
             <span class="diff-name">😎 FÁCIL</span>
-            <span class="diff-desc">Policiais atiram devagar • Dano baixo (3 HP) • Ciclo: 60 frames</span>
+            <span class="diff-desc">Mais curas/upgrades • Policiais lentos • Dano baixo (3 HP)</span>
         </button>
         <button class="diff-btn" id="btnNormal" onclick="chooseDifficulty('normal')">
             <span class="diff-name">🔫 NORMAL</span>
@@ -175,7 +171,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
     <!-- GAME OVER SCREEN -->
     <div id="gameOverScreen">
         <div class="go-title">GAME OVER</div>
-        <div class="go-sub">VOCÊ FOI ABATIDO, MORADOR!</div>
+        <div class="go-sub">SE FODEU!</div>
         <div class="go-score">PONTUAÇÃO: <span id="goScore">0</span></div>
         <div class="go-diff">DIFICULDADE: <span id="goDiff">NORMAL</span></div>
         <button class="go-btn" id="goRetryBtn" onclick="retryGame()">🔄 JOGAR NOVAMENTE</button>
@@ -246,12 +242,14 @@ const G = {
     weaponLevel: 1,
     paused: false,
     vehicleHitCooldown: 0,
-    difficulty: 'normal', // 'facil', 'normal', 'dificil'
+    difficulty: 'normal', 
     difficultyConfig: {
-        facil:   { shootCooldown: 60, bulletDmg: [0,2,3,4,5,6],   label: 'FÁCIL' },
+        facil:   { shootCooldown: 60, bulletDmg: [0,1,2,3,4,5],   label: 'FÁCIL' },
         normal:  { shootCooldown: 40, bulletDmg: [0,3,5,8,12,20],  label: 'NORMAL' },
         dificil: { shootCooldown: 20, bulletDmg: [0,6,10,16,22,30], label: 'DIFÍCIL' }
-    }
+    },
+    screenBloodAlpha: 0,
+    mouseAngle: 0
 };
 
 // MAP GENERATION
@@ -454,7 +452,7 @@ function spawnPoliceUnit(level) {
     if (level <= 2) {
         const cop = createNPC(sx, sy, id);
         cop.isPolice = true; cop.hp = 5 + level*2; cop.shootTimer = 0;
-        cop.shootCooldown = 60 - level*8;
+        cop.shootCooldown = G.difficultyConfig[G.difficulty].shootCooldown;
         G.npcs.push(cop);
         G.policeUnits.push({ type:'officer', ref:cop });
     } else {
@@ -463,7 +461,7 @@ function spawnPoliceUnit(level) {
         G.vehicles.push(car); G.policeUnits.push({ type:'car', ref:car });
         if (level >= 4) {
             const cop2 = createNPC(sx+30, sy, id+1000);
-            cop2.isPolice = true; cop2.hp = 8; cop2.shootCooldown = 40; cop2.shootTimer = 0;
+            cop2.isPolice = true; cop2.hp = 8; cop2.shootCooldown = G.difficultyConfig[G.difficulty].shootCooldown; cop2.shootTimer = 0;
             G.npcs.push(cop2); G.policeUnits.push({ type:'officer', ref:cop2 });
         }
     }
@@ -486,12 +484,11 @@ function spawnNPCs() {
         const fy = (12 + Math.random()*50)*TILE;
         G.npcs.push(createNPC(fx, fy, 2000+i));
     }
-    // Police patrols espalhados pelo mapa
     for (let i=0;i<10;i++) {
         const px = (50 + Math.random()*220)*TILE;
         const py = (30 + Math.random()*150)*TILE;
         const cop = createNPC(px, py, 3000+i);
-        cop.isPolice = true; cop.hp = 5; cop.shootCooldown = 55; cop.shootTimer = Math.floor(Math.random()*55);
+        cop.isPolice = true; cop.hp = 5; cop.shootCooldown = G.difficultyConfig[G.difficulty].shootCooldown; cop.shootTimer = Math.floor(Math.random()*55);
         G.npcs.push(cop);
     }
 }
@@ -642,7 +639,7 @@ function drawBather(ctx, npc, camX, camY) {
 function drawPlayer(ctx, p, camX, camY) {
     if (p.inVehicle) return; const sx=p.x-camX, sy=p.y-camY;
     p.animTimer++; if (p.animTimer>4){p.frame=(p.frame+1)%8;p.animTimer=0;}
-    const drawAngle = G.aimJoystick.active ? G.aimJoystick.angle : p.angle;
+    const drawAngle = G.aimJoystick.active ? G.aimJoystick.angle : (G.mouseAngle !== undefined ? G.mouseAngle : p.angle);
     pixelChar(ctx,sx,sy,COLORS.playerSkin,COLORS.playerShirt,COLORS.playerLegs,drawAngle,p.frame,p.running,p.shooting,p.dead,false,false);
 }
 
@@ -778,12 +775,14 @@ function updatePlayer(dt) {
             const nx=p.x+dx*baseSpd*TILE*0.1, ny=p.y+dy*baseSpd*TILE*0.1;
             if (!isSolid(nx,p.y)) p.x=nx;
             if (!isSolid(p.x,ny)) p.y=ny;
-            p.angle=Math.atan2(dy,dx)-Math.PI/2;
+            if (!G.aimJoystick.active && G.mouseAngle === 0) {
+                p.angle=Math.atan2(dy,dx)-Math.PI/2;
+            }
         } else { p.running=false; }
     }
     if (p.shootTimer>0) p.shootTimer--;
     if (G.input.shoot&&p.shootTimer<=0&&!p.inVehicle) {
-        const shootAngle = G.aimJoystick.active ? G.aimJoystick.angle : p.angle;
+        const shootAngle = G.aimJoystick.active ? G.aimJoystick.angle : (G.mouseAngle !== undefined ? G.mouseAngle : p.angle);
         shoot(p.x,p.y,shootAngle,true,false); p.shooting=true;
         const shootCooldowns = [8,7,6,5,5];
         p.shootTimer = shootCooldowns[G.weaponLevel-1]||8;
@@ -815,7 +814,6 @@ function updateNPCs() {
                 if (!isSolid(nx2,n.y)) n.x=nx2; if (!isSolid(n.x,ny2)) n.y=ny2;
                 n.running=true; n.shootTimer--;
                 if (n.shootTimer<=0&&dp<220) {
-                    // Atirar direto na direção do jogador
                     const shootAng = Math.atan2(G.player.x-n.x, -(G.player.y-n.y));
                     shoot(n.x,n.y,shootAng,false,true); n.shootTimer=G.difficultyConfig[G.difficulty].shootCooldown;
                 }
@@ -920,13 +918,11 @@ function shoot(x,y,angle,isPlayer,isPolice) {
     else if (lvl===2) { fireBullet(angle); }
     else if (lvl===3) { fireBullet(angle); }
     else if (lvl===4) {
-        // 4 tiros: frente + 2 diagonais
         fireBullet(angle);
         fireBullet(angle - Math.PI/6);
         fireBullet(angle + Math.PI/6);
         fireBullet(angle + Math.PI);
     } else if (lvl===5) {
-        // 4 rajadas: 2 frente, 2 diagonais
         fireBullet(angle, spd);
         fireBullet(angle, spd*0.85);
         fireBullet(angle - Math.PI/5, spd);
@@ -944,7 +940,7 @@ function updateBullets() {
             for (const n of G.npcs) {
                 if (n.dead||n.inVehicle) continue;
                 if (dist(b.x,b.y,n.x,n.y)<12) {
-                    n.hp -= (b.dmg||1); spawnBlood(n.x,n.y);
+                    n.hp -= (b.dmg||1); spawnBlood(n.x,n.y, 6);
                     if (n.hp<=0) killNPC(n,'baleado'); else {n.panic=true;n.panicTimer=120;}
                     hit=true; break;
                 }
@@ -963,6 +959,8 @@ function updateBullets() {
             if (dist(b.x,b.y,G.player.x,G.player.y)<15) {
                 const dmgTable = G.difficultyConfig[G.difficulty].bulletDmg;
                 G.player.hp -= dmgTable[G.wanted] || dmgTable[1];
+                G.screenBloodAlpha = 0.55; 
+                spawnBlood(G.player.x, G.player.y, 10); 
                 if (G.player.hp<=0) playerDie();
                 G.bullets.splice(i,1);
             }
@@ -975,11 +973,11 @@ function hitNPCWithVehicle(v) {
         if (n.dead||n.inVehicle) continue;
         if (dist(n.x,n.y,v.x,v.y)<22) { killNPC(n,'atropelado'); v.speed*=0.7; }
     }
-    // Veículos tiram metade do HP do jogador (2 atropelamentos = morte), com cooldown
     if (!G.player.inVehicle && dist(v.x,v.y,G.player.x,G.player.y)<28 && G.vehicleHitCooldown<=0) {
         G.player.hp = Math.max(0, G.player.hp - G.player.maxHp/2);
-        G.vehicleHitCooldown = 90; // ~1.5s de invencibilidade
-        spawnBlood(G.player.x, G.player.y, 3);
+        G.vehicleHitCooldown = 90; 
+        G.screenBloodAlpha = 0.8; 
+        spawnBlood(G.player.x, G.player.y, 16); 
         G.explosions.push({x:G.player.x,y:G.player.y,timer:8,maxTimer:8,size:20});
         if (G.player.hp<=0) playerDie();
     }
@@ -988,7 +986,7 @@ function hitNPCWithVehicle(v) {
 function killNPC(n,method) {
     if (n.dead) return;
     n.hp=0;n.dying=true;n.dead=true;n.dyingTimer=60;
-    spawnBlood(n.x,n.y,5);
+    spawnBlood(n.x,n.y,8);
     G.score+=n.isPolice?(method==='atropelado'?500:300):(method==='atropelado'?150:100);
     if (!n.isPolice) { G.wanted=Math.min(5,G.wanted+1); G.wantedTimer=600; G.wantedCooldown=0; updateWantedUI(); }
     else { G.score+=500; G.wanted=Math.min(5,G.wanted+1); G.wantedTimer=900; G.wantedCooldown=0; updateWantedUI(); }
@@ -1019,7 +1017,17 @@ function exitVehicle(p) {
     p.vehicleId=-1;p.enterCooldown=30;
 }
 
-function spawnBlood(x,y,count=3) { for (let i=0;i<count;i++) G.blood.push({x:x+(Math.random()-0.5)*20,y:y+(Math.random()-0.5)*20,size:3+Math.random()*5,alpha:0.8+Math.random()*0.2}); }
+function spawnBlood(x,y,count=6) { 
+    for (let i=0;i<count;i++) {
+        G.blood.push({
+            x:x+(Math.random()-0.5)*32,
+            y:y+(Math.random()-0.5)*32,
+            size:5+Math.random()*9,
+            alpha:0.8+Math.random()*0.2
+        }); 
+    }
+}
+
 function updateExplosions() { for (let i=G.explosions.length-1;i>=0;i--) { G.explosions[i].timer--; if (G.explosions[i].timer<=0) G.explosions.splice(i,1); } }
 function dist(ax,ay,bx,by){return Math.sqrt((ax-bx)**2+(ay-by)**2);}
 
@@ -1028,25 +1036,31 @@ function spawnPickup(type) {
     const vroads = [22,38,55,72,90,108,126,144,162,180,198,216,234,252,270,288];
     const ry = roads[Math.floor(Math.random()*roads.length)];
     const rx = vroads[Math.floor(Math.random()*vroads.length)];
-    // Coloca na calçada, não na rua
     const offX = (Math.random()<0.5?-1:1) * (8 + Math.floor(Math.random()*6));
     const offY = (Math.random()<0.5?-1:1) * (8 + Math.floor(Math.random()*6));
     G.pickups.push({ type, x:(rx+offX)*TILE, y:(ry+offY)*TILE, id: G.frame+Math.random() });
 }
 
 function updatePickups() {
-    // Spawn balanceado: hamburguer a cada ~8s, arma a cada ~20s
     G.pickupSpawnTimer++;
     const burgerCount = G.pickups.filter(p=>p.type==='burger').length;
     const weaponCount = G.pickups.filter(p=>p.type==='weapon').length;
-    if (G.pickupSpawnTimer % 480 === 0 && burgerCount < 5) spawnPickup('burger');
-    if (G.pickupSpawnTimer % 1200 === 0 && weaponCount < 3) spawnPickup('weapon');
-    // Spawn inicial
+    
+    const burgerInterval = G.difficulty === 'facil' ? 240 : 480; 
+    const weaponInterval = G.difficulty === 'facil' ? 600 : 1200; 
+    const maxBurgers = G.difficulty === 'facil' ? 12 : 5;       
+    const maxWeapons = G.difficulty === 'facil' ? 6 : 3;        
+
+    if (G.pickupSpawnTimer % burgerInterval === 0 && burgerCount < maxBurgers) spawnPickup('burger');
+    if (G.pickupSpawnTimer % weaponInterval === 0 && weaponCount < maxWeapons) spawnPickup('weapon');
+    
     if (G.pickups.length===0 && G.pickupSpawnTimer < 10) {
-        for(let i=0;i<3;i++) spawnPickup('burger');
-        for(let i=0;i<2;i++) spawnPickup('weapon');
+        const initBurgers = G.difficulty === 'facil' ? 6 : 3;
+        const initWeapons = G.difficulty === 'facil' ? 4 : 2;
+        for(let i=0;i<initBurgers;i++) spawnPickup('burger');
+        for(let i=0;i<initWeapons;i++) spawnPickup('weapon');
     }
-    // Coleta
+    
     const p = G.player;
     if (p.dead||p.inVehicle) return;
     for (let i=G.pickups.length-1;i>=0;i--) {
@@ -1074,21 +1088,14 @@ function drawPickups(ctx, camX, camY) {
         const bob = Math.sin(G.frame*0.08)*3;
         ctx.save(); ctx.translate(sx, sy+bob);
         if (pk.type==='burger') {
-            // Bun top
             ctx.fillStyle='#c8760a'; ctx.beginPath(); ctx.ellipse(0,-9,9,5,0,0,Math.PI*2); ctx.fill();
             ctx.fillStyle='#e8a020'; ctx.beginPath(); ctx.ellipse(0,-10,8,3,0,0,Math.PI*2); ctx.fill();
-            // Sesame seeds
             ctx.fillStyle='#fff'; ctx.fillRect(-3,-12,2,1); ctx.fillRect(2,-11,2,1);
-            // Patty
             ctx.fillStyle='#6b2800'; ctx.fillRect(-9,-5,18,5);
-            // Lettuce
             ctx.fillStyle='#3aaa3a'; ctx.fillRect(-9,-1,18,3);
-            // Bun bottom
             ctx.fillStyle='#c8760a'; ctx.fillRect(-9,2,18,5);
-            // Glow
             ctx.fillStyle='rgba(255,200,0,0.2)'; ctx.beginPath(); ctx.arc(0,0,14,0,Math.PI*2); ctx.fill();
         } else {
-            // Weapon icon
             ctx.fillStyle='rgba(255,200,0,0.25)'; ctx.beginPath(); ctx.arc(0,0,14,0,Math.PI*2); ctx.fill();
             ctx.fillStyle='#888'; ctx.fillRect(-10,-3,16,6);
             ctx.fillStyle='#aaa'; ctx.fillRect(6,-5,4,4);
@@ -1160,6 +1167,13 @@ function render() {
     const vg=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8);
     vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.35)');
     ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+
+    // Efeito Visual de Respingo / Splash de Dano na Tela
+    if (G.screenBloodAlpha > 0) {
+        ctx.fillStyle = `rgba(160, 0, 0, ${G.screenBloodAlpha})`;
+        ctx.fillRect(0, 0, W, H);
+        G.screenBloodAlpha -= 0.015; 
+    }
 }
 
 function updateScoreUI(){document.getElementById('scoreVal').textContent=G.score.toLocaleString();}
@@ -1205,15 +1219,41 @@ function setupControls() {
             if(t.identifier===G.aimJoystick.id){resetAimKnob();}
         }
     });
+
+    // MOUSE & PC CONTROLS (ESTILO BRAWL STARS)
+    window.addEventListener('contextmenu', e => e.preventDefault()); 
+
+    window.addEventListener('mousemove', e => {
+        if (!G.player || G.player.dead || G.joystick.active || G.aimJoystick.active) return;
+        const playerScreenX = G.player.x - G.camera.x;
+        const playerScreenY = G.player.y - G.camera.y;
+        const dx = e.clientX - playerScreenX;
+        const dy = e.clientY - playerScreenY;
+        G.mouseAngle = Math.atan2(dy, dx) - Math.PI / 2;
+    });
+
+    window.addEventListener('mousedown', e => {
+        if (!G.player || G.player.dead) return;
+        if (e.button === 0) { 
+            G.input.shoot = true;
+        } else if (e.button === 2) { 
+            tryEnterVehicle();
+        }
+    });
+
+    window.addEventListener('mouseup', e => {
+        if (e.button === 0) {
+            G.input.shoot = false;
+        }
+    });
+
     const keys={};
-    document.addEventListener('keydown',e=>{keys[e.code]=true;updateKeyInput(keys); if(e.code==='Escape')togglePause();});
-    document.addEventListener('keyup',e=>{keys[e.code]=false;updateKeyInput(keys);});
+    document.addEventListener('keydown', e=>{keys[e.code]=true;updateKeyInput(keys); if(e.code==='Escape')togglePause();});
+    document.addEventListener('keyup', e=>{keys[e.code]=false;updateKeyInput(keys);});
     function updateKeyInput(k){
         G.input.dx=(k['KeyD']||k['ArrowRight']?1:0)-(k['KeyA']||k['ArrowLeft']?1:0);
         G.input.dy=(k['KeyS']||k['ArrowDown']?1:0)-(k['KeyW']||k['ArrowUp']?1:0);
-        G.input.shoot=!!(k['Space']||k['KeyF']);
         G.input.run=!!(k['ShiftLeft']||k['ShiftRight']);
-        if(k['KeyE']||k['KeyG'])tryEnterVehicle();
     }
     function btnPress(id,onPress,onRelease){
         const el=document.getElementById(id); if(!el)return;
@@ -1284,57 +1324,45 @@ function backToTitle() {
     document.getElementById('titleScreen').style.display = 'flex';
 }
 
-function chooseDifficulty(diff) {
-    G.difficulty = diff;
+function chooseDifficulty(type) {
+    G.difficulty = type;
     document.getElementById('difficultyScreen').style.display = 'none';
     startGame();
 }
 
 function showGameOver() {
-    const diffLabel = G.difficultyConfig[G.difficulty].label;
+    G.running = false;
     document.getElementById('goScore').textContent = G.score.toLocaleString();
-    document.getElementById('goDiff').textContent = diffLabel;
+    document.getElementById('goDiff').textContent = G.difficultyConfig[G.difficulty].label;
     document.getElementById('gameOverScreen').style.display = 'flex';
 }
 
 function retryGame() {
     document.getElementById('gameOverScreen').style.display = 'none';
-    // Reset everything and start with same difficulty
-    G.bullets = []; G.explosions = []; G.blood = [];
-    G.npcs = []; G.vehicles = []; G.policeUnits = [];
-    G.score = 0; G.wanted = 0; G.wantedTimer = 0; G.wantedCooldown = 0;
-    G.policeSpawnTimer = 0; G.frame = 0; G.spawnTimer = 0;
-    updateScoreUI(); updateWantedUI();
     startGame();
 }
 
 function goToMenu() {
     document.getElementById('gameOverScreen').style.display = 'none';
-    G.running = false; G.paused = false;
-    G.bullets = []; G.explosions = []; G.blood = [];
-    G.npcs = []; G.vehicles = []; G.policeUnits = [];
-    G.score = 0; G.wanted = 0;
-    updateScoreUI(); updateWantedUI();
     document.getElementById('titleScreen').style.display = 'flex';
-    // Redraw title art
-    drawTitleArt();
 }
 
 function startGame() {
-    document.getElementById('titleScreen').style.display='none';
-    G.player=createPlayer(); G.camera={x:G.player.x-G.W/2,y:G.player.y-G.H/2};
-    G.pickups=[]; G.pickupSpawnTimer=0; G.weaponLevel=1; G.vehicleHitCooldown=0; G.paused=false;
-    generateMap(); setupControls(); updateWeaponUI();
-    G.running=true;G.lastTime=performance.now(); requestAnimationFrame(gameLoop);
+    G.score = 0; G.wanted = 0; G.wantedTimer = 0; G.wantedCooldown = 0; G.frame = 0; G.spawnTimer = 0; G.pickupSpawnTimer = 0; G.weaponLevel = 1; G.screenBloodAlpha = 0;
+    G.bullets = []; G.explosions = []; G.blood = []; G.pickups = [];
+    updateScoreUI(); updateWantedUI(); updateWeaponUI();
+    generateMap();
+    G.player = createPlayer();
+    setupControls();
+    G.running = true; G.paused = false;
+    G.lastTime = performance.now();
+    requestAnimationFrame(gameLoop);
 }
 
-window.addEventListener('load',()=>{
-    initCanvas();drawTitleArt();
-    document.addEventListener('contextmenu',e=>e.preventDefault());
-    document.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
-});
+window.onload = () => {
+    initCanvas();
+    drawTitleArt();
+};
 </script>
-
-
 </body>
 </html>
