@@ -250,6 +250,9 @@ const G = {
     mouseAngle: undefined
 };
 
+const trilhaSonora = new Audio('sua_musica.mp3'); 
+trilhaSonora.loop = true;
+
 // MAP GENERATION
 function generateMap() {
     G.worldMap = Array.from({length: WORLD_H}, () => Array(WORLD_W).fill(3));
@@ -1141,7 +1144,12 @@ function togglePause() {
     G.paused = !G.paused;
     document.getElementById('pauseScreen').style.display = G.paused ? 'flex' : 'none';
     document.getElementById('pauseBtn').textContent = G.paused ? '▶ JOGO' : '⏸ PAUSA';
-    if (!G.paused) {
+    
+    // Controla a música no pause
+    if (G.paused) {
+        trilhaSonora.pause();
+    } else {
+        trilhaSonora.play();
         G.lastTime = performance.now();
         requestAnimationFrame(gameLoop);
     }
@@ -1345,6 +1353,7 @@ function showDifficultyScreen() {
 }
 
 function backToTitle() {
+    trilhaSonora.pause(); // Pausa a música
     document.getElementById('difficultyScreen').style.display = 'none';
     document.getElementById('titleScreen').style.display = 'flex';
 }
@@ -1357,6 +1366,7 @@ function chooseDifficulty(type) {
 
 function showGameOver() {
     G.running = false;
+    trilhaSonora.pause(); // Pausa a música
     document.getElementById('goScore').textContent = G.score.toLocaleString();
     document.getElementById('goDiff').textContent = G.difficultyConfig[G.difficulty].label;
     document.getElementById('gameOverScreen').style.display = 'flex';
@@ -1368,6 +1378,7 @@ function retryGame() {
 }
 
 function goToMenu() {
+    trilhaSonora.pause(); // Pausa a música
     document.getElementById('gameOverScreen').style.display = 'none';
     document.getElementById('titleScreen').style.display = 'flex';
 }
@@ -1379,6 +1390,11 @@ function startGame() {
     generateMap();
     G.player = createPlayer();
     setupControls();
+    
+    // Zera o tempo da música e dá o play
+    trilhaSonora.currentTime = 0; 
+    trilhaSonora.play().catch(e => console.log("Aguardando interação para tocar o áudio"));
+
     G.running = true; G.paused = false;
     G.lastTime = performance.now();
     requestAnimationFrame(gameLoop);
